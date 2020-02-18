@@ -1,0 +1,6 @@
+background
+frog
+cat
+elephant
+tiger
+star
