@@ -5,13 +5,14 @@ Teammembers: Marco Schreiner, Max Sauer, Boas Luke Ruoss, Marco Zimmerer, Peter 
 
 class Robot:
         
-    def __init__(self, Motor1_Rate = 0, Motor2_Rate = 0, direction = "none", speed_frontLeft = 0, speed_frontRight = 0):
+    def __init__(self, Motor1_Rate = 0, Motor2_Rate = 0, speed_frontLeft = 0, speed_frontRight = 0, borderCrossed = False, selectedAnimal = "none"):
         self.Motor1_Rate = Motor1_Rate
         self.Motor2_Rate = Motor2_Rate
-        self.direction = direction
         self.speed_frontLeft = speed_frontLeft
         self.speed_frontRight = speed_frontRight
-        
+        self.borderCrossed = borderCrossed
+        self.selectedAnimal = selectedAnimal
+
     #Setter and Getter for Speed
 
     def set_speed_frontLeft(self, speedLeft):               #Here has to be added an if condition that is used to calibrate the robot
@@ -99,6 +100,10 @@ class Robot:
         else: 
             pass
 
+    def stopDriving(self):
+        self.set_speed_frontLeft(0)
+        self.set_speed_frontRight(0)
+
     #Functions to check the direction and the speed of the robot 
 
     def speedChecker(self, rate, ahead):
@@ -142,13 +147,96 @@ class Robot:
         else:
             return False
 
-    #Function start is to start the Robot
+    #functions for sensors 
+
+    def checkBorder(self):
+
+        self.sensorData == True
+
+        if self.sensorData == True:
+            self.borderCrossed == True
+            return self.borderCrossed
+
+        else: 
+            pass
+
+    def getSelectedAnimal(self):
+        
+        if selection == 1:
+            self.selectedAnimal == "Tiger"
+            return self.selectedAnimal
+        elif selection == 2:
+            self.selectedAnimal == "Elephant"
+            return self.selectedAnimal
+        elif selection == 3:
+            self.selectedAnimal == "Frog"
+            return self.selectedAnimal
+        elif selection == 4:
+            self.selectedAnimal == "Cat"
+            return self.selectedAnimal
+        elif selection == 5:
+            self.selectedAnimal == "Star"
+            return self.selectedAnimal
+
+    def animalCatched(self):
+        return False
+
+    #function inside the area for catching the animal
+
+    def catchAnimal(self):
+        self.getSelectedAnimal()
+        self.Scan()
+        self.checkDirection()
+
+        while Sensorfront == False:
+            self.checkDirection()
+        else:
+            self.stopDriving()
+            self.closePress()
+        
+        while NoneAnimalinScreen == True:
+            return true                 #insert function to check if there are other animals in screen and how to get them out of the screen.
+        else:
+            self.driveForward("Fast")
+        
+        while self.borderCrossed == False:
+            self.checkBorder()
+        else:
+            pause()
+            self.stopDriving()
+    
+    def freeAnimal(self):
+        self.openPress()
+        self.driveBack("fast")
+        pause()
+        self.stopDriving
+
+    def dance(self):                    #a little easter egg function
+        self.set_speed_frontLeft(3)
+        self.set_speed_frontRight(-3)
+        pause()
+        self.stopDriving()
+    
     def start(self):
-        return True
+
+        while self.borderCrossed == False:
+            self.driveForward("fast")
+            self.checkBorder()
+        
+        else:
+            self.borderCrossed == False #Setting borderCrossed on false after you crossed it
+
+    #Let's go robot!
+
+    def goRobot(self):
+        self.start()
+        self.catchAnimal()
+        self.freeAnimal()
+        self.dance()
 
 
 """
-Testing Area of the Skript
+Testing Area of the Script
 """
 
 
