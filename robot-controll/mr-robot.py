@@ -3,15 +3,18 @@ This is the source code of group 5 in the "Integrationsseminar" with the robotna
 Teammembers: Marco Schreiner, Max Sauer, Boas Luke Ruoss, Marco Zimmerer, Peter Walz, Christian Finkbeiner
 """
 
+import time 
+
 class Robot:
         
-    def __init__(self, Motor1_Rate = 0, Motor2_Rate = 0, speed_frontLeft = 0, speed_frontRight = 0, borderCrossed = False, selectedAnimal = "none"):
+    def __init__(self, Motor1_Rate = 0, Motor2_Rate = 0, speed_frontLeft = 0, speed_frontRight = 0, borderCrossed = False, selectedAnimal = "none", drivingDirection = "ahead"):
         self.Motor1_Rate = Motor1_Rate
         self.Motor2_Rate = Motor2_Rate
         self.speed_frontLeft = speed_frontLeft
         self.speed_frontRight = speed_frontRight
         self.borderCrossed = borderCrossed
         self.selectedAnimal = selectedAnimal
+        self.drivingDirection = drivingDirection
 
     #Setter and Getter for Speed
 
@@ -165,21 +168,22 @@ class Robot:
         if selection == 1:
             self.selectedAnimal == "Tiger"
             return self.selectedAnimal
+
         elif selection == 2:
             self.selectedAnimal == "Elephant"
             return self.selectedAnimal
+
         elif selection == 3:
             self.selectedAnimal == "Frog"
             return self.selectedAnimal
+
         elif selection == 4:
             self.selectedAnimal == "Cat"
             return self.selectedAnimal
+
         elif selection == 5:
             self.selectedAnimal == "Star"
             return self.selectedAnimal
-
-    def animalCatched(self):
-        return False
 
     #function inside the area for catching the animal
 
@@ -190,31 +194,32 @@ class Robot:
 
         while Sensorfront == False:
             self.checkDirection()
+
         else:
-            self.stopDriving()
-            self.closePress()
+            self.driveForward("slow")
         
-        while NoneAnimalinScreen == True:
-            return true                 #insert function to check if there are other animals in screen and how to get them out of the screen.
+        while NoneAnimalinScreen == False:
+            return true                             #insert function to check if there are other animals in screen and how to get them out of the screen.
+
         else:
             self.driveForward("Fast")
         
         while self.borderCrossed == False:
             self.checkBorder()
+
         else:
-            pause()
+            time.sleep(5)
             self.stopDriving()
     
     def freeAnimal(self):
-        self.openPress()
         self.driveBack("fast")
-        pause()
+        time.sleep(5)
         self.stopDriving
 
-    def dance(self):                    #a little easter egg function
+    def dance(self):                                #a little easter egg function
         self.set_speed_frontLeft(3)
         self.set_speed_frontRight(-3)
-        pause()
+        time.sleep(10)
         self.stopDriving()
     
     def start(self):
@@ -241,5 +246,5 @@ Testing Area of the Script
 
 
 Mr_Robot = Robot()
-# Mr_Robot.start()
+# Mr_Robot.goRobot()
 Mr_Robot.driveForward("slow")
