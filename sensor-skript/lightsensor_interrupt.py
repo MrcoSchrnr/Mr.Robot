@@ -12,7 +12,7 @@ import time
 
 GPIO_LIGHT = 4 # Lightsensor GPIO pin
 IGNORE_INTERVAL = 5000 # microseconds
-HIGH = 1
+HIGH = 4
 
 tally = 0 # counter for callback function calls
 last_tick = 0 # time of last valid callback function call
