@@ -8,7 +8,7 @@ import imutils
 current_fps = 0
 myFrame = 0
 
-myConfidence = 0.76
+myConfidence = 0.4
 myThreshold = 0.4
 
 limitCPUtemp = True
@@ -50,7 +50,7 @@ networks["64_v3"] = {"folder": "64_v3", "resolution": 64,
 networks["64_v2"] = {"folder": "64_v2", "resolution": 64,
                      "weights": "yolov3-tiny_last.weights"}
 
-selectedNetwork = networks["64_v6"]
+selectedNetwork = networks["64_v2"]
 
 # Video Inputs
 # myInput = "../videos/test-video1.mp4"
