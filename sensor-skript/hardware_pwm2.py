@@ -12,7 +12,7 @@ GPIO_PWM = 13 # PWM pin
 GPIO_IN1 = 27 # motor control pin
 GPIO_IN2 = 22 # motor control pin
 
-RUNNING_TIME = 10 # seconds
+RUNNING_TIME = 5 # seconds
 PWM_FREQUENCY = 50000 # Hz
 PWM_DUTY_CYCLE = 10 # percent
 

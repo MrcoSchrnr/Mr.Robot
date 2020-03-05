@@ -12,7 +12,7 @@ GPIO_IN2 = 24 # motor control pin
 #GPIO_IN1 = 27 # motor control pin
 #GPIO_IN2 = 22 # motor control pin
 
-RUNNING_TIME = 10 # seconds
+RUNNING_TIME = 5 # seconds
 PWM_FREQUENCY = 50000 # Hz
 PWM_DUTY_CYCLE = 10 # percent
 
@@ -31,8 +31,8 @@ pi = pigpio.pi()
 # 0, 0 stop slowly
 pi.set_mode(GPIO_IN1, pigpio.OUTPUT)
 pi.set_mode(GPIO_IN2, pigpio.OUTPUT)
-pi.write(GPIO_IN1, 0)
-pi.write(GPIO_IN2, 1)
+pi.write(GPIO_IN1, 1)
+pi.write(GPIO_IN2, 0)
 
 try:
     duty = PWM_DUTY_CYCLE * 10000 # Max: 1M
