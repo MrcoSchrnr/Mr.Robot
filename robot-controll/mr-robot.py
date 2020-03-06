@@ -6,13 +6,15 @@ Teammembers: Marco Schreiner, Max Sauer, Boas Luke Ruoss, Marco Zimmerer, Peter 
 import time 
 import motor-LeftWheel
 import motor-RightWheel
+import motor-Back
 import lightsensor_interrupt
 
 class Robot:
         
-    def __init__(self, speed_frontLeft = 0, speed_frontRight = 0, borderCrossed = False, selectedAnimal = "none", drivingDirection = "ahead"):
+    def __init__(self, speed_frontLeft = 0, speed_frontRight = 0, speed_Back = 0, borderCrossed = False, selectedAnimal = "none", drivingDirection = "ahead"):
         self.speed_frontLeft = speed_frontLeft
         self.speed_frontRight = speed_frontRight
+        self.speed_Back = speed_Back
         self.borderCrossed = borderCrossed
         self.selectedAnimal = selectedAnimal
         self.drivingDirection = drivingDirection
@@ -43,6 +45,19 @@ class Robot:
         #define String of self.speed_frontRight
         self.speed_frontRight = str(ahead, (" ", frequency, " ", duty))
 
+    # True = left; False = right
+    def set_speed_motorBack(self, direction, speedLeft):           # Here has to be added an if condition that is used to calibrate the robot
+        #adding different speed types
+        
+        # driving
+        motor-Back.drive(direction = direction)
+        
+        # stop driving
+        motor-Back.stop()
+
+        #define String of self.speed_frontRight
+        self.speed_Back = str(direction, (" ", frequency, " ", duty))
+
     def get_speed_motorLeft(self):
         self.speed_frontLeft = motor-LeftWheel.getData()
         return self.speed_frontLeft
@@ -51,10 +66,16 @@ class Robot:
         self.speed_frontRight = motor-RightWheel.getData()
         return self.speed_frontRight
 
+    def get_speed_motorBack(self):
+        self.speed_Back = motor-Back.getData()
+        return self.speed_Back
+
     # driving functions
     """
     The robot will drive into the direction of the selected animal. In this case there are 5 different sections in the camera to get the right direction: straight lef, soft left, straight forward, soft right, straight right. After we got the animal and drive it out of the are we have to drive away from the animal
     """
+    # These functions has to be changed because of the 3rd wheel on the back
+
     # Placeholder for speed forward: 1 slow, 2 normal, 3 fast; stop: 0; backwards: -1 slow, -2 medium, -3 fast
 
     def driveForward(self, rateForward):
@@ -65,14 +86,17 @@ class Robot:
             if rateForward == "slow":
                 self.set_speed_motorLeft(True, 1)
                 self.set_speed_motorRight(True, 1)
+                self.set_speed_motorBack(True, 0)
 
             elif rateForward == "medium":
                 self.set_speed_motorLeft(True, 2)
                 self.set_speed_motorRight(True, 2)
+                self.set_speed_motorBack(True, 0)
 
             elif rateForward == "hard":
                 self.set_speed_motorLeft(True, 3)
                 self.set_speed_motorRight(True, 3)
+                self.set_speed_motorBack(True, 0)
 
         # speed is already set
         else:
@@ -86,20 +110,24 @@ class Robot:
             if rateBackwards == "slow":
                 self.set_speed_motorLeft(False, 1)
                 self.set_speed_motorRight(False,1)
+                self.set_speed_motorBack(True, 0)
 
             elif rateBackwards == "medium":
                 self.set_speed_motorLeft(False, 2)
                 self.set_speed_motorRight(False, 2)
+                self.set_speed_motorBack(True, 0)
 
             elif rateBackwards == "hard":
                 self.set_speed_motorLeft(False, 3)
                 self.set_speed_motorRight(False, 3)
+                self.set_speed_motorBack(True, 0)
 
         # speed is already set
         else:
             pass
-
-    def turn(self, direction, rate):
+    
+    # maybe there has to be added an function für driving with same body position (body don't turn)
+    def turn(self, direction, rate):                                # has to be changed
 
         if self.directionChecker(direction, rate) == False:
 
@@ -125,9 +153,10 @@ class Robot:
     def stopDriving(self):
         self.set_speed_motorLeft(True, 0)
         self.set_speed_motorRight(True, 0)
+        self.set_speed_motorBack(True, 0)
 
     # Functions to check the direction and the speed of the robot 
-
+    # these function has to be changed as well because of the 3rd motor
     def speedChecker(self, rate, ahead):
 
         # check for speed
@@ -171,9 +200,8 @@ class Robot:
 
     # functions for sensors 
 
-    def checkBorder(self):
-    
-    # define function for: none return from sensor -> false, else true
+    def checkBorder(self):                                  # has to be changed
+        # define function for: none return from sensor -> false, else true
 
         if self.sensorData == True:
             self.borderCrossed == True
@@ -182,7 +210,7 @@ class Robot:
         else: 
             pass
 
-    def getSelectedAnimal(self):
+    def getSelectedAnimal(self):                            # has to be changed
         selection = selectionScript.getData()               # has to be changed 
 
         if selection == 1:
@@ -207,7 +235,7 @@ class Robot:
 
     # function inside the area for catching the animal
 
-    def catchAnimal(self):
+    def catchAnimal(self):                                  # has to be changed
         self.getSelectedAnimal()
         self.Scan()
         self.checkDirection()
@@ -236,7 +264,7 @@ class Robot:
         time.sleep(5)
         self.stopDriving
 
-    def dance(self):                                # a little easter egg function
+    def dance(self):                                # a little easter egg function but has to be changed for the motor on the back
         self.set_speed_motorLeft(True, 3)
         self.set_speed_motorRight(False, 3)
         time.sleep(10)
@@ -259,12 +287,13 @@ class Robot:
         self.freeAnimal()
         self.dance()
 
-    def reset():
+    def reset():                                            # has to be changed
         return True                     # Function to reset the selected Animal; speed on Wheels and so on. 
 
     def shutDown():
         motor-LeftWheel.shutDown()
         motor-RightWheel.shutDown()
+        motor-Back.shutDown()
 
 """
 Testing Area of the Script
