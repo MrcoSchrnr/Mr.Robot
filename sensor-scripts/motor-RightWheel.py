@@ -64,4 +64,8 @@ def test():
     stop()
     shutDown()
 
+def getData():
+    dataArray = [ahead, PWM_FREQUENCY, duty_cycle]
+    return dataArray
+
 test()
