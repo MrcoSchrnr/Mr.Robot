@@ -4,8 +4,9 @@ Teammembers: Marco Schreiner, Max Sauer, Boas Luke Ruoss, Marco Zimmerer, Peter 
 """
 
 import time 
-import motorPWM2.py
-import lightsensor_interrupt.py
+import motor-LeftWheel
+import motor-RightWheel
+import lightsensor_interrupt
 
 class Robot:
         
@@ -18,31 +19,36 @@ class Robot:
 
     # Setter and Getter for Speed
 
-    def set_speed_frontLeft(self, ahead, speedLeft):               # Here has to be added an if condition that is used to calibrate the robot
-        ahead = ahead
-
-        if speedLeft == 1:
-            frequenzy == 50000
-
-        elif speedLeft == 2:
-            frequenzy == 60000
-        
-        elif speedLeft == 3:
-            frequenzy == 70000
+    def set_speed_motorLeft(self, ahead, speedLeft):               # Here has to be added an if condition that is used to calibrate the robot        
+        #adding different speed types
         
         # driving
-        motorPWM2.drive(ahead, frequenzy, 10)
+        motor-LeftWheel.drive(ahead = ahead)
         
         # stop driving
-        motorPWM2.stop()
+        motor-LeftWheel.stop()
 
-    def set_speed_frontRight(self, speedRight):             # Here has to be added an if condition that is used to calibrate the robot
-        self.speed_frontRight = speedRight
+        #define String of self.speed_frontLeft
+        self.speed_frontLeft = str(ahead, (" ", frequency, " ", duty))
 
-    def get_speed_frontLeft(self):
+    def set_speed_motorRight(self, ahead, speedRight):             # Here has to be added an if condition that is used to calibrate the robot
+        #adding different speed types
+        
+        # driving
+        motor-LeftWheel.drive(ahead = ahead)
+        
+        # stop driving
+        motor-LeftWheel.stop()
+
+        #define String of self.speed_frontRight
+        self.speed_frontRight = str(ahead, (" ", frequency, " ", duty))
+
+    def get_speed_motorLeft(self):
+        self.speed_frontLeft = motor-LeftWheel.getData()
         return self.speed_frontLeft
 
-    def get_speed_frontRight(self):
+    def get_speed_motorRight(self):
+        self.speed_frontRight = motor-RightWheel.getData()
         return self.speed_frontRight
 
     # driving functions
@@ -57,16 +63,16 @@ class Robot:
         if self.speedChecker(rateForward, True) == False:
 
             if rateForward == "slow":
-                self.set_speed_frontLeft(True, 1)
-                self.set_speed_frontRight(True, 1)
+                self.set_speed_motorLeft(True, 1)
+                self.set_speed_motorRight(True, 1)
 
             elif rateForward == "medium":
-                self.set_speed_frontLeft(True, 2)
-                self.set_speed_frontRight(True, 2)
+                self.set_speed_motorLeft(True, 2)
+                self.set_speed_motorRight(True, 2)
 
             elif rateForward == "hard":
-                self.set_speed_frontLeft(True, 3)
-                self.set_speed_frontRight(True, 3)
+                self.set_speed_motorLeft(True, 3)
+                self.set_speed_motorRight(True, 3)
 
         # speed is already set
         else:
@@ -78,16 +84,16 @@ class Robot:
         if self.speedChecker(rateBackwards, False) == False:
 
             if rateBackwards == "slow":
-                self.set_speed_frontLeft(False, 1)
-                self.set_speed_frontRight(False,1)
+                self.set_speed_motorLeft(False, 1)
+                self.set_speed_motorRight(False,1)
 
             elif rateBackwards == "medium":
-                self.set_speed_frontLeft(False, 2)
-                self.set_speed_frontRight(False, 2)
+                self.set_speed_motorLeft(False, 2)
+                self.set_speed_motorRight(False, 2)
 
             elif rateBackwards == "hard":
-                self.set_speed_frontLeft(False, 3)
-                self.set_speed_frontRight(False, 3)
+                self.set_speed_motorLeft(False, 3)
+                self.set_speed_motorRight(False, 3)
 
         # speed is already set
         else:
@@ -98,49 +104,49 @@ class Robot:
         if self.directionChecker(direction, rate) == False:
 
             if direction == "left" and rate == "soft":
-                self.set_speed_frontLeft(True, 2)
-                self.set_speed_frontRight(True, 3)
+                self.set_speed_motorLeft(True, 2)
+                self.set_speed_motorRight(True, 3)
 
             elif direction == "left" and rate == "hard":
-                self.set_speed_frontLeft(True, 1)
-                self.set_speed_frontRight(True, 3)
+                self.set_speed_motorLeft(True, 1)
+                self.set_speed_motorRight(True, 3)
 
             elif direction == "right" and rate == "soft":
-                self.set_speed_frontLeft(True, 3)
-                self.set_speed_frontRight(True, 2)
+                self.set_speed_motorLeft(True, 3)
+                self.set_speed_motorRight(True, 2)
 
             elif direction == "right" and rate == "hard":
-                self.set_speed_frontLeft(True, 3)
-                self.set_speed_frontLeft(True, 1)
+                self.set_speed_motorLeft(True, 3)
+                self.set_speed_motorLeft(True, 1)
 
         else: 
             pass
 
     def stopDriving(self):
-        self.set_speed_frontLeft(True, 0)
-        self.set_speed_frontRight(True, 0)
+        self.set_speed_motorLeft(True, 0)
+        self.set_speed_motorRight(True, 0)
 
     # Functions to check the direction and the speed of the robot 
 
     def speedChecker(self, rate, ahead):
 
         # check for speed
-        if ahead == False and rate == "slow" and get_speed_frontLeft() == -3 and get_speed_frontRight() == -3:
+        if ahead == False and rate == "slow" and get_speed_motorLeft() == -3 and get_speed_motorRight() == -3:
             return True
 
-        elif ahead == False and rate == "hard" and get_speed_frontLeft() == -2 and get_speed_frontRight() == -2:
+        elif ahead == False and rate == "hard" and get_speed_motorLeft() == -2 and get_speed_motorRight() == -2:
             return True
 
-        elif ahead == False and rate == "slow" and get_speed_frontLeft() == -1 and get_speed_frontRight() == -1:
+        elif ahead == False and rate == "slow" and get_speed_motorLeft() == -1 and get_speed_motorRight() == -1:
             return True
 
-        elif ahead == True and rate == "slow" and get_speed_frontLeft() == -1 and get_speed_frontRight() == -1:
+        elif ahead == True and rate == "slow" and get_speed_motorLeft() == -1 and get_speed_motorRight() == -1:
             return True
 
-        elif ahead == True and rate == "medium" and get_speed_frontLeft() == -2 and get_speed_frontRight() == -2:
+        elif ahead == True and rate == "medium" and get_speed_motorLeft() == -2 and get_speed_motorRight() == -2:
             return True
 
-        elif ahead == True and rate == "hard" and get_speed_frontLeft() == -3 and get_speed_frontRight() == -3: 
+        elif ahead == True and rate == "hard" and get_speed_motorLeft() == -3 and get_speed_motorRight() == -3: 
             return True
 
         else:
@@ -148,16 +154,16 @@ class Robot:
 
     def directionChecker(self, direction, rate):
 
-        if direction == "left" and rate == "hard" and self.get_speed_frontLeft == 1 and self.get_speed_frontRight == 3:
+        if direction == "left" and rate == "hard" and self.get_speed_motorLeft == 1 and self.get_speed_motorRight == 3:
             return True
 
-        elif direction == "left" and rate == "soft" and self.get_speed_frontLeft == 2 and self.get_speed_frontRight == 3:
+        elif direction == "left" and rate == "soft" and self.get_speed_motorLeft == 2 and self.get_speed_motorRight == 3:
             return True
 
-        elif direction == "right" and rate == "soft" and self.get_speed_frontLeft == 3 and self.get_speed_frontRight == 2:
+        elif direction == "right" and rate == "soft" and self.get_speed_motorLeft == 3 and self.get_speed_motorRight == 2:
             return True
 
-        elif direction == "right" and rate == "hard" and self.get_speed_frontLeft == 3 and self.get_speed_frontRight == 1:
+        elif direction == "right" and rate == "hard" and self.get_speed_motorLeft == 3 and self.get_speed_motorRight == 1:
             return True
 
         else:
@@ -166,6 +172,8 @@ class Robot:
     # functions for sensors 
 
     def checkBorder(self):
+    
+    # define function for: none return from sensor -> false, else true
 
         if self.sensorData == True:
             self.borderCrossed == True
@@ -175,7 +183,8 @@ class Robot:
             pass
 
     def getSelectedAnimal(self):
-        
+        selection = selectionScript.getData()               # has to be changed 
+
         if selection == 1:
             self.selectedAnimal == "Tiger"
             return self.selectedAnimal
@@ -228,8 +237,8 @@ class Robot:
         self.stopDriving
 
     def dance(self):                                # a little easter egg function
-        self.set_speed_frontLeft(True, 3)
-        self.set_speed_frontRight(False, 3)
+        self.set_speed_motorLeft(True, 3)
+        self.set_speed_motorRight(False, 3)
         time.sleep(10)
         self.stopDriving()
     
@@ -250,6 +259,12 @@ class Robot:
         self.freeAnimal()
         self.dance()
 
+    def reset():
+        return True                     # Function to reset the selected Animal; speed on Wheels and so on. 
+
+    def shutDown():
+        motor-LeftWheel.shutDown()
+        motor-RightWheel.shutDown()
 
 """
 Testing Area of the Script
@@ -258,4 +273,4 @@ Testing Area of the Script
 
 Mr_Robot = Robot()
 # Mr_Robot.goRobot()
-Mr_Robot.driveForward("slow")
+Mr_Robot.shutDown()
