@@ -58,6 +58,10 @@ class Robot:
         #define String of self.speed_frontRight
         self.speed_Back = str(direction, (" ", frequency, " ", duty))
 
+
+    """
+    Maybe we don't need the getters because we don't check the speed while driving.  
+    """
     def get_speed_motorLeft(self):
         self.speed_frontLeft = motor-LeftWheel.getData()
         return self.speed_frontLeft
@@ -81,7 +85,7 @@ class Robot:
     def driveForward(self, rateForward):
 
         #current speed is different to the speed needed 
-        if self.speedChecker(rateForward, True) == False:
+        #if self.speedChecker(rateForward, True) == False:
 
             if rateForward == "slow":
                 self.set_speed_motorLeft(True, 1)
@@ -99,13 +103,13 @@ class Robot:
                 self.set_speed_motorBack(True, 0)
 
         # speed is already set
-        else:
-            pass
+        #else:
+        #   pass
 
     def driveBack(self, rateBackwards):
 
         # current speed is different to the speed needed
-        if self.speedChecker(rateBackwards, False) == False:
+        #if self.speedChecker(rateBackwards, False) == False:
 
             if rateBackwards == "slow":
                 self.set_speed_motorLeft(False, 1)
@@ -123,8 +127,8 @@ class Robot:
                 self.set_speed_motorBack(True, 0)
 
         # speed is already set
-        else:
-            pass
+        #else:
+        #    pass
     
     # maybe there has to be added an function für driving with same body position (body don't turn)
     def turn(self, direction, rate):                                # has to be changed
@@ -155,8 +159,16 @@ class Robot:
         self.set_speed_motorRight(True, 0)
         self.set_speed_motorBack(True, 0)
 
+    """
+    Guess we dont need that functions because the checkers are not necessary, this robot is not that complex. 
+
     # Functions to check the direction and the speed of the robot 
     # these function has to be changed as well because of the 3rd motor
+
+    def movementChecker(self, ahead, direction, rate):
+        # placeholder for overall checker if needed. If we can send new setter values without any error, we will not need the checker functions
+        return True
+
     def speedChecker(self, rate, ahead):
 
         # check for speed
@@ -197,6 +209,7 @@ class Robot:
 
         else:
             return False
+    """
 
     # functions for sensors 
 
@@ -287,18 +300,20 @@ class Robot:
         self.freeAnimal()
         self.dance()
 
-    def reset():                                            # has to be changed
+    def reset(self):                                            # has to be changed
         return True                     # Function to reset the selected Animal; speed on Wheels and so on. 
 
-    def shutDown():
+    def shutDown(self):
         motor-LeftWheel.shutDown()
         motor-RightWheel.shutDown()
         motor-Back.shutDown()
 
+
+
+
 """
 Testing Area of the Script
 """
-
 
 Mr_Robot = Robot()
 # Mr_Robot.goRobot()
