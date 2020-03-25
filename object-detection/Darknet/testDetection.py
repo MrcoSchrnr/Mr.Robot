@@ -39,18 +39,18 @@ if device is "pc":
     
 # Networks
 networks = {}
-networks["64_v6"] = {"folder": "64_v6", "resolution": 64,
-                     "weights": "team5_62100.weights"}
+networks["64_v6"] = {"folder": "64_v6", "resolution": 224,
+                     "weights": "team5_62.weights"}
 networks["64_v5"] = {"folder": "64_v5", "resolution": 64,
                      "weights": "team5_14000.weights"}
-networks["64_v4"] = {"folder": "64_v4", "resolution": 64,
+networks["64_v4"] = {"folder": "64_v4", "resolution": 224,
                      "weights": "yolov3-tiny_last.weights"}
 networks["64_v3"] = {"folder": "64_v3", "resolution": 64,
                      "weights": "yolov3-tiny_last.weights"}
 networks["64_v2"] = {"folder": "64_v2", "resolution": 64,
                      "weights": "yolov3-tiny_last.weights"}
 
-selectedNetwork = networks["64_v6"]
+selectedNetwork = networks["64_v4"]
 
 # Video Inputs
 # myInput = "../videos/test-video1.mp4"

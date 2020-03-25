@@ -1,0 +1,61 @@
+import pigpio
+import time
+
+
+#left
+GPIO_PWM1 = 13 # PWM pin
+GPIO_IN1left = 27 # motor control pin
+GPIO_IN2left = 22 # motor control pin
+
+#right
+GPIO_PWM2 = 12 # PWM pin
+GPIO_IN1right = 23 # motor control pin
+GPIO_IN2right = 24 # motor control pin
+
+
+pi = pigpio.pi()
+
+def drive(ahead = True, frequency = 50000, duty_cycle = 100):
+
+    PWM_FREQUENCY = frequency #Hz
+    PWM_DUTY_CYCLE = duty_cycle #percent
+
+    if ahead == True:
+        pi.set_mode(GPIO_IN1right, pigpio.OUTPUT)
+        pi.set_mode(GPIO_IN2right, pigpio.OUTPUT)
+        pi.write(GPIO_IN1right, 0)
+        pi.write(GPIO_IN2right, 1)
+        
+        pi.set_mode(GPIO_IN1left, pigpio.OUTPUT)
+        pi.set_mode(GPIO_IN2left, pigpio.OUTPUT) 
+        pi.write(GPIO_IN1left, 0)
+        pi.write(GPIO_IN2left, 1)
+        
+
+   
+        
+        
+
+    try:
+        duty = PWM_DUTY_CYCLE * 10000 # Max: 1M
+        pi.hardware_PWM (GPIO_PWM2, PWM_FREQUENCY, duty)
+        print('Hardware PWM on GPIO ' + str(GPIO_PWM2) + ' enabled')
+        print('Frequency: ' + str(pi.get_PWM_frequency(GPIO_PWM2)) + ' Hz')
+        print('Dutycycle: ' + \
+              str(pi.get_PWM_dutycycle(GPIO_PWM2) / 10000) + ' percent')
+        duty = PWM_DUTY_CYCLE * 10000 # Max: 1M
+        pi.hardware_PWM (GPIO_PWM1, PWM_FREQUENCY, duty)
+        print('Hardware PWM on GPIO ' + str(GPIO_PWM2) + ' enabled')
+        print('Frequency: ' + str(pi.get_PWM_frequency(GPIO_PWM2)) + ' Hz')
+        print('Dutycycle: ' + \
+              str(pi.get_PWM_dutycycle(GPIO_PWM2) / 10000) + ' percent')
+        
+    except: 
+        print('Hardware PWM not available on GPIO ' + str(GPIO_PWM1))
+        pi.stop()
+        
+
+        
+
+drive()
+
