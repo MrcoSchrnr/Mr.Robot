@@ -8,6 +8,42 @@ import motor-LeftWheel
 import motor-RightWheel
 import motor-Back
 import lightsensor_interrupt
+import pigpio
+
+"""
+Area Pinouts
+"""
+
+# Maybe ON/OFF
+
+# Switch
+
+GPIO_IN_Elephant = 0 # Switchposition 1 - Elephant          TODO: Check right Pin for X
+ 
+GPIO_IN_Tiger = 0    # Switchposition 2 - Tiger
+
+GPIO_IN_Star = 0     # Switchposition 3 - Star              TODO: Check right Pin for X
+ 
+GPIO_IN_Cat = 5      # Switchposition 4 - Cat               TODO: Check right Pin for X
+
+GPIO_IN_Frog = 0     # Switchposition 5 - Frog              TODO: Check right Pin for X
+
+# Motor
+
+                                                           #TODO: Pinout Motor
+
+# Ultrasonic - @pre pigpio demon must be running (sudo pigpiod)
+
+GPIO_Ultra_ECHO = 17 # ultrasonic sensor input pin (echo)
+GPIO_Ultra_TRIG = 26 # ultrasonic sensor output pin (trigger)
+
+# Lightsensor - @pre pigpio demon must be running (sudo pigpiod)
+
+GPIO_LIGHT = 4 # Lightsensor GPIO pin
+
+"""
+End of Area Pinouts
+"""
 
 class Robot:
         
@@ -18,6 +54,7 @@ class Robot:
         self.borderCrossed = borderCrossed
         self.selectedAnimal = selectedAnimal
         self.drivingDirection = drivingDirection
+        
 
     # Setter and Getter for Speed
 
@@ -76,7 +113,10 @@ class Robot:
 
     # driving functions
     """
-    The robot will drive into the direction of the selected animal. In this case there are 5 different sections in the camera to get the right direction: straight lef, soft left, straight forward, soft right, straight right. After we got the animal and drive it out of the are we have to drive away from the animal
+    The robot will drive into the direction of the selected animal. 
+    In this case there are 5 different sections in the camera to get the right direction: 
+    straight lef, soft left, straight forward, soft right, straight right. 
+    After we got the animal and drive it out of the are we have to drive away from the animal
     """
     # These functions has to be changed because of the 3rd wheel on the back
 
@@ -223,28 +263,29 @@ class Robot:
         else: 
             pass
 
-    def getSelectedAnimal(self):                            # has to be changed
-        selection = selectionScript.getData()               # has to be changed 
+    def getSelectedAnimal(self):                            #TAKE CARE! Signal 0 = On. Signal 1 = OFF.
+        
+        self.pi = pigpio.pi()  
 
-        if selection == 1:
-            self.selectedAnimal == "Tiger"
-            return self.selectedAnimal
+        selectedAnimal = "none"
+      
+        if self.pi.read(GPIO_IN_Elephant) == 0:
+            selectedAnimal = "Elephant"        
 
-        elif selection == 2:
-            self.selectedAnimal == "Elephant"
-            return self.selectedAnimal
+        if self.pi.read(GPIO_IN_Tiger) == 0:
+            selectedAnimal = "Tiger"
 
-        elif selection == 3:
-            self.selectedAnimal == "Frog"
-            return self.selectedAnimal
+        if self.pi.read(GPIO_IN_Frog) == 0:
+            selectedAnimal = "Frog"
 
-        elif selection == 4:
-            self.selectedAnimal == "Cat"
-            return self.selectedAnimal
+        if self.pi.read(GPIO_IN_Cat) == 0:
+            selectedAnimal = "Cat"
 
-        elif selection == 5:
-            self.selectedAnimal == "Star"
-            return self.selectedAnimal
+        if self.pi.read(GPIO_IN_Star) == 0:
+            selectedAnimal = "Star"
+
+        print("You choose the " + selectedAnimal)
+        return selectedAnimal 
 
     # function inside the area for catching the animal
 
@@ -278,8 +319,8 @@ class Robot:
         self.stopDriving
 
     def dance(self):                                # a little easter egg function but has to be changed for the motor on the back
-        self.set_speed_motorLeft(True, 3)
-        self.set_speed_motorRight(False, 3)
+        self.set_speed_motorLeft(True, 3)           # maybe if every single switch is on.
+        self.set_speed_motorRight(False, 3)   
         time.sleep(10)
         self.stopDriving()
     
