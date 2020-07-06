@@ -3,6 +3,11 @@ This is the source code of group 5 in the "Integrationsseminar" with the robotna
 Teammembers: Marco Schreiner, Max Sauer, Boas Luke Ruoss, Marco Zimmerer, Peter Walz, Christian Finkbeiner
 """
 
+"""
+Procedure: 1.init Robot 2.driving forward 3.if cross line -> activate camera 4.drive to animal + actiavate ultrasonic sensor
+           5.if ultraonsic scan animal -> drive forward for fleeing animal + deativate ultrasonic + activate lightsensor 6. if across the line, timesleep 5sec + drive backwards
+"""
+
 import time 
 import motor-LeftWheel
 import motor-RightWheel
@@ -322,6 +327,10 @@ class Robot:
         self.stopDriving
     
     def start(self):
+
+        #active line-sensor
+        #deactivate camera
+        #deactivate ultrasonic-sensor
 
         while self.borderCrossed == False:
             self.driveForward("fast")
