@@ -99,6 +99,7 @@ class Robot:
     """
     Maybe we don't need the getters because we don't check the speed while driving.  
     """
+    
     def get_speed_motorLeft(self):
         self.speed_frontLeft = motor-LeftWheel.getData()
         return self.speed_frontLeft
