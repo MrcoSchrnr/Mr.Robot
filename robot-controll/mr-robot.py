@@ -164,9 +164,9 @@ class Robot:
                 Thread(target = self.set_speed_motorBack(True, 2)).start()
                 
             elif rateBackwards == "hard":
-                Thread(target = self.set_speed_motorLeft(False, 3)).start()
-                Thread(target = self.set_speed_motorRight(False, 3)).start()
-                Thread(target = self.set_speed_motorBack(True, 0)).start()
+                Thread(target = self.set_speed_motorLeft(False, 0)).start()
+                Thread(target = self.set_speed_motorRight(False, 0)).start()
+                Thread(target = self.set_speed_motorBack(True, 3)).start()
                 
         # speed is already set
         #else:
