@@ -9,12 +9,12 @@ Procedure: 1.init Robot 2.driving forward 3.if cross line -> activate camera 4.d
 """
 
 import time 
-import motor-LeftWheel
-import motor-RightWheel
-import motor-Back
-import lightsensor_interrupt
 import pigpio
 from threading import Thread
+
+from driving import Driver
+import lightsensor_interrupt
+
 
 """
 Area Pinouts
@@ -53,211 +53,10 @@ End of Area Pinouts
 
 class Robot:
         
-    def __init__(self, speed_frontLeft = 0, speed_frontRight = 0, speed_Back = 0, borderCrossed = False, selectedAnimal = "none", drivingDirection = "ahead"):
-        self.speed_frontLeft = speed_frontLeft
-        self.speed_frontRight = speed_frontRight
-        self.speed_Back = speed_Back
-        self.borderCrossed = borderCrossed
+    def __init__(self, selectedAnimal = "none"):
         self.selectedAnimal = selectedAnimal
-        self.drivingDirection = drivingDirection
-        
+        self.driver = Driver()
 
-    # Setter and Getter for Speed
-
-    def set_speed_motorLeft(self, ahead, speedLeft):               # Here has to be added an if condition that is used to calibrate the robot        
-        #adding different speed types
-        
-        # driving
-        motor-LeftWheel.drive(ahead = ahead)
-        
-        # stop driving
-        motor-LeftWheel.stop()
-
-        #define String of self.speed_frontLeft
-        self.speed_frontLeft = str(ahead, (" ", frequency, " ", duty))
-
-    def set_speed_motorRight(self, ahead, speedRight):             # Here has to be added an if condition that is used to calibrate the robot
-        #adding different speed types
-        
-        # driving
-        motor-LeftWheel.drive(ahead = ahead)
-        
-        # stop driving
-        motor-LeftWheel.stop()
-
-        #define String of self.speed_frontRight
-        self.speed_frontRight = str(ahead, (" ", frequency, " ", duty))
-
-    # True = left; False = right
-    def set_speed_motorBack(self, direction, speedLeft):           # Here has to be added an if condition that is used to calibrate the robot
-        #adding different speed types
-        
-        # driving
-        motor-Back.drive(direction = direction)
-        
-        # stop driving
-        motor-Back.stop()
-
-        #define String of self.speed_frontRight
-        self.speed_Back = str(direction, (" ", frequency, " ", duty))
-
-
-    """
-    Maybe we don't need the getters because we don't check the speed while driving.  
-    """
-    
-    def get_speed_motorLeft(self):
-        self.speed_frontLeft = motor-LeftWheel.getData()
-        return self.speed_frontLeft
-
-    def get_speed_motorRight(self):
-        self.speed_frontRight = motor-RightWheel.getData()
-        return self.speed_frontRight
-
-    def get_speed_motorBack(self):
-        self.speed_Back = motor-Back.getData()
-        return self.speed_Back
-
-    # driving functions
-    """
-    The robot will drive into the direction of the selected animal. 
-    In this case there are 5 different sections in the camera to get the right direction: 
-    straight lef, soft left, straight forward, soft right, straight right. 
-    After we got the animal and drive it out of the are we have to drive away from the animal
-    """
-    # These functions has to be changed because of the 3rd wheel on the back
-
-    # Placeholder for speed forward: 1 slow, 2 normal, 3 fast; stop: 0; backwards: -1 slow, -2 medium, -3 fast
-
-    def driveForward(self, rateForward):
-
-        #current speed is different to the speed needed 
-        #if self.speedChecker(rateForward, True) == False:       
-
-            if rateForward == "slow":
-                Thread(target = self.set_speed_motorLeft(True, 1)).start()
-                Thread(target = self.set_speed_motorRight(True, 1)).start()
-                Thread(target = self.set_speed_motorBack(True, 0)).start()
-
-            elif rateForward == "medium":
-                Thread(target = self.set_speed_motorLeft(True, 2)).start()
-                Thread(target = self.set_speed_motorRight(True, 2)).start()
-                Thread(target = self.set_speed_motorBack(True, 0)).start()
-
-            elif rateForward == "hard":
-                Thread(target = self.set_speed_motorLeft(True, 3)).start()
-                Thread(target = self.set_speed_motorRight(True, 3)).start()
-                Thread(target = self.set_speed_motorBack(True, 0)).start()
-
-        # speed is already set
-        #else:
-        #   pass
-
-    def driveBack(self, rateBackwards):
-
-        # current speed is different to the speed needed
-        #if self.speedChecker(rateBackwards, False) == False:
-
-            if rateBackwards == "slow":
-                Thread(target = self.set_speed_motorLeft(False, 0)).start()
-                Thread(target = self.set_speed_motorRight(False, 0)).start()
-                Thread(target = self.set_speed_motorBack(True, 1)).start()
-
-            elif rateBackwards == "medium":
-                Thread(target = self.set_speed_motorLeft(False, 0)).start()
-                Thread(target = self.set_speed_motorRight(False, 0)).start()
-                Thread(target = self.set_speed_motorBack(True, 2)).start()
-                
-            elif rateBackwards == "hard":
-                Thread(target = self.set_speed_motorLeft(False, 0)).start()
-                Thread(target = self.set_speed_motorRight(False, 0)).start()
-                Thread(target = self.set_speed_motorBack(True, 3)).start()
-                
-        # speed is already set
-        #else:
-        #    pass
-    
-    # maybe there has to be added an function für driving with same body position (body don't turn)
-    def turn(self, direction, rate):                                # has to be changed
-
-        if self.directionChecker(direction, rate) == False:
-
-            if direction == "left" and rate == "soft":
-                Thread(target = self.set_speed_motorLeft(True, 2)).start()
-                Thread(target = self.set_speed_motorRight(True, 3)).start()
-
-            elif direction == "left" and rate == "hard":
-                Thread(target = self.set_speed_motorLeft(True, 1)).start()
-                Thread(target = self.set_speed_motorRight(True, 3)).start()
-                
-            elif direction == "right" and rate == "soft":
-                Thread(target = self.set_speed_motorLeft(True, 3)).start()
-                Thread(target = self.set_speed_motorRight(True, 2)).start()
-                
-            elif direction == "right" and rate == "hard":
-                Thread(target = self.set_speed_motorLeft(True, 3)).start()
-                Thread(target = self.set_speed_motorLeft(True, 1)).start()        
-
-        else: 
-            pass
-
-    def stopDriving(self):
-        Thread(target = self.set_speed_motorLeft(True, 0)).start()
-        Thread(target = self.set_speed_motorRight(True, 0)).start() 
-        Thread(target =   self.set_speed_motorBack(True, 0))).start()
-          
-
-    """
-    Guess we dont need that functions because the checkers are not necessary, this robot is not that complex. 
-
-    # Functions to check the direction and the speed of the robot 
-    # these function has to be changed as well because of the 3rd motor
-
-    def movementChecker(self, ahead, direction, rate):
-        # placeholder for overall checker if needed. If we can send new setter values without any error, we will not need the checker functions
-        return True
-
-    def speedChecker(self, rate, ahead):
-
-        # check for speed
-        if ahead == False and rate == "slow" and get_speed_motorLeft() == -3 and get_speed_motorRight() == -3:
-            return True
-
-        elif ahead == False and rate == "hard" and get_speed_motorLeft() == -2 and get_speed_motorRight() == -2:
-            return True
-
-        elif ahead == False and rate == "slow" and get_speed_motorLeft() == -1 and get_speed_motorRight() == -1:
-            return True
-
-        elif ahead == True and rate == "slow" and get_speed_motorLeft() == -1 and get_speed_motorRight() == -1:
-            return True
-
-        elif ahead == True and rate == "medium" and get_speed_motorLeft() == -2 and get_speed_motorRight() == -2:
-            return True
-
-        elif ahead == True and rate == "hard" and get_speed_motorLeft() == -3 and get_speed_motorRight() == -3: 
-            return True
-
-        else:
-            return False
-
-    def directionChecker(self, direction, rate):
-
-        if direction == "left" and rate == "hard" and self.get_speed_motorLeft == 1 and self.get_speed_motorRight == 3:
-            return True
-
-        elif direction == "left" and rate == "soft" and self.get_speed_motorLeft == 2 and self.get_speed_motorRight == 3:
-            return True
-
-        elif direction == "right" and rate == "soft" and self.get_speed_motorLeft == 3 and self.get_speed_motorRight == 2:
-            return True
-
-        elif direction == "right" and rate == "hard" and self.get_speed_motorLeft == 3 and self.get_speed_motorRight == 1:
-            return True
-
-        else:
-            return False
-    """
 
     # functions for sensors 
 
@@ -349,16 +148,10 @@ class Robot:
     def reset(self):                                            # has to be changed
         return True                     # Function to reset the selected Animal; speed on Wheels and so on. 
 
-    def shutDown(self):
-        motor-LeftWheel.shutDown()
-        motor-RightWheel.shutDown()
-        motor-Back.shutDown()
-
 
 """
 Testing Area of the Script
 """
 
 Mr_Robot = Robot()
-# Mr_Robot.goRobot()
-Mr_Robot.shutDown()
+Mr_Robot.test()
