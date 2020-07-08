@@ -13,7 +13,9 @@ import pigpio
 from threading import Thread
 
 from driving import Driver
-import lightsensor_interrupt
+#from sensorControl import AnimalSelector
+from sensorControl import LightSensor
+#from sensorControl import UltraSensor
 
 
 """
@@ -34,18 +36,12 @@ GPIO_IN_Cat = 5      # Switchposition 4 - Cat               TODO: Check right Pi
 
 GPIO_IN_Frog = 0     # Switchposition 5 - Frog              TODO: Check right Pin for X
 
-# Motor
-
-                                                           #TODO: Pinout Motor
 
 # Ultrasonic - @pre pigpio demon must be running (sudo pigpiod)
 
 GPIO_Ultra_ECHO = 17 # ultrasonic sensor input pin (echo)
 GPIO_Ultra_TRIG = 26 # ultrasonic sensor output pin (trigger)
 
-# Lightsensor - @pre pigpio demon must be running (sudo pigpiod)
-
-GPIO_LIGHT = 4 # Lightsensor GPIO pin
 
 """
 End of Area Pinouts
@@ -56,19 +52,12 @@ class Robot:
     def __init__(self, selectedAnimal = "none"):
         self.selectedAnimal = selectedAnimal
         self.driver = Driver()
+        self.lightSensor = LightSensor()
+        #self.ultraSensor = UltraSensor()
+        #self.animalSelector = AnimalSelector()
 
 
     # functions for sensors 
-
-    def checkBorder(self):                                  # has to be changed
-        # define function for: none return from sensor -> false, else true
-
-        if self.sensorData == True:
-            self.borderCrossed == True
-            return self.borderCrossed
-
-        else: 
-            pass
 
     def getSelectedAnimal(self):                            #TAKE CARE! Signal 0 = On. Signal 1 = OFF.
         
@@ -121,22 +110,21 @@ class Robot:
             self.stopDriving()
     
     def freeAnimal(self):
-        self.driveBack("fast")
-        time.sleep(5)
-        self.stopDriving
+        self.driver.driveBackwards("fast")
+        time.sleep(1)
+        self.driver.stopDriving()
     
     def start(self):
+        #getAnimalThread = Thread(target=self.animalSelector.isAnimalSelected())
+        drivingThread = Thread(target=self.driver.driveForward("medium"))
+        lightSensorThread = Thread(target=self.lightSensor.runLineChecker())
 
-        #active line-sensor
-        #deactivate camera
-        #deactivate ultrasonic-sensor
-
-        while self.borderCrossed == False:
-            self.driveForward("fast")
-            self.checkBorder()
+        # here has to be an if condition for a selected animal. maybe with a while loop for the selected animal for 3 seconds or something like that 
+    
         
-        else:
-            self.borderCrossed == False # Setting borderCrossed on false after you crossed it
+        lightSensorThread.start()
+        drivingThread.start()
+
 
     # Let's go robot!
 
@@ -153,5 +141,6 @@ class Robot:
 Testing Area of the Script
 """
 
-Mr_Robot = Robot()
-Mr_Robot.test()
+TestRobot = Robot()
+TestRobot.start()
+
