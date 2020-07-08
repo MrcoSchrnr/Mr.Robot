@@ -1,64 +1,44 @@
 import pigpio
 import time
+import threading
+import functools
 
 #class AnimalSelector:
 
 
 class LightSensor:
 
-    def __init__(self, GPIO_LIGHT = 3, tally = 0, last_tick = 0, IGNORE_INTERVAL = 5000, HIGH = 1):
+    def __init__(self, GPIO_LIGHT = 3, colorStop = 1):
         self.GPIO_LIGHT = GPIO_LIGHT # Lightsensor GPIO pin
-        self.IGNORE_INTERVAL = IGNORE_INTERVAL # microseconds
-        self.HIGH = HIGH # returns HIGH for black and LOW for WHITE
-        self.tally = tally # counter for callback function calls
-        self.last_tick = last_tick # time of last valid callback function call
+        self.colorStop = colorStop # returns 1 for black and 0 for WHITE
         self.pi = pigpio.pi()
+        self.lineCrossed = False
     
 
-    def level_changed(self, gpio_num, level, tick):
-        self.tally += 1 
+    def levelChanged(self, gpio_num, level, tick):
 
-        if ((self.pi.read(gpio_num) == self.HIGH) and (tick - self.last_tick > self.IGNORE_INTERVAL)):
-            print(f"{level} {self.tally} {((tick-self.last_tick)/1000000.):0.2f}")
-            self.last_tick = tick
+        lineValue = self.pi.read(gpio_num)
+        if (lineValue == self.colorStop):
+            self.lineCrossed = True
 
 
-    def scan(self):
+    def runLineChecker(self):
+        
         self.pi.set_mode(self.GPIO_LIGHT, pigpio.INPUT)
+        cb = self.pi.callback(self.GPIO_LIGHT, pigpio.RISING_EDGE, self.levelChanged)
+        
+        while self.lineCrossed == False:
+            time.sleep(1)
+            print("Waiting for crossing Line.")
+            print('--------------------------------------------------------------------')
 
-        # Only LOW to HIGH is considered (rising edge). See logic in callback.
-        # Callback must be adapted for considering falling edge.
-        cb = self.pi.callback(self.GPIO_LIGHT, pigpio.RISING_EDGE, self.level_changed)
-
-        while True:
-            try:
-                time.sleep(1)
-            except KeyboardInterrupt:
-                print('User interrupt')
-                break;
-
+        print('Robot crossed line.')
+        self.stop()
 
     def stop(self):
         print('Shutting down LightSensor.')
+        print('--------------------------------------------------------------------')
         self.pi.stop()
 
 
-    def checkBorder(self):
-        while self.scan() != True:
-            try:
-                time.sleep(1)
-            except KeyboardInterrupt:
-                print('User interrupt')
-                break;
-
-        print('Robot crossed border.')
-        self.stop()
-
-
 #class UltraSensor:
-    
-
-
-
-TestSensor = LightSensor()
-TestSensor.scan()

@@ -13,9 +13,9 @@ import pigpio
 from threading import Thread
 
 from driving import Driver
-from sensorControl import AnimalSelector
+#from sensorControl import AnimalSelector
 from sensorControl import LightSensor
-from sensorControl import UltraSensor
+#from sensorControl import UltraSensor
 
 
 """
@@ -53,8 +53,8 @@ class Robot:
         self.selectedAnimal = selectedAnimal
         self.driver = Driver()
         self.lightSensor = LightSensor()
-        self.ultraSensor = UltraSensor()
-        self.animalSelector = AnimalSelector()
+        #self.ultraSensor = UltraSensor()
+        #self.animalSelector = AnimalSelector()
 
 
     # functions for sensors 
@@ -115,23 +115,15 @@ class Robot:
         self.driver.stopDriving()
     
     def start(self):
-
-        getAnimalThread = Thread(target=self.animalSelector.isAnimalSelected())
+        #getAnimalThread = Thread(target=self.animalSelector.isAnimalSelected())
         drivingThread = Thread(target=self.driver.driveForward("medium"))
-        lightSensorThread = Thread(target=self.lightSensor.scan())
+        lightSensorThread = Thread(target=self.lightSensor.runLineChecker())
 
         # here has to be an if condition for a selected animal. maybe with a while loop for the selected animal for 3 seconds or something like that 
     
-        drivingThread.start()
+        
         lightSensorThread.start()
-        
-        while lightSensorThread == False:
-            pass
-        
-        else:
-            lightSensorThread._stop()
-            drivingThread.stop()
-            break;
+        drivingThread.start()
 
 
     # Let's go robot!
@@ -148,4 +140,7 @@ class Robot:
 """
 Testing Area of the Script
 """
+
+TestRobot = Robot()
+TestRobot.start()
 
