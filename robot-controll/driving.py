@@ -58,16 +58,50 @@ class Driver:
     
 
     def driveLeft(self, rate):
-        return True
+        if rate == "slow":
+            Thread(target=self.engines.setSpeedLeft(True, 50000, 5)).start()
+            Thread(target=self.engines.setSpeedRight(True, 50000, 5)).start()
+            Thread(target=self.engines.setSpeedBack(True, 50000, 10)).start()
+
+        elif rate == "medium":
+            Thread(target=self.engines.setSpeedLeft(True, 50000, 10)).start()
+            Thread(target=self.engines.setSpeedRight(True, 50000, 10)).start()
+            Thread(target=self.engines.setSpeedBack(True, 50000, 10)).start()  
+
+        elif rate == "fast":
+            Thread(target=self.engines.setSpeedLeft(True, 50000, 80)).start()
+            Thread(target=self.engines.setSpeedRight(True, 50000, 80)).start()
+            Thread(target=self.engines.setSpeedBack(True, 50000, 10)).start()  
+
+        else:
+            print('Error. No rate selected.')      
     
 
     def driveRight(self, rate):
-        return True
+        if rate == "slow":
+            Thread(target=self.engines.setSpeedLeft(True, 50000, 5)).start()
+            Thread(target=self.engines.setSpeedRight(True, 50000, 5)).start()
+            Thread(target=self.engines.setSpeedBack(False, 50000, 10)).start()
+
+        elif rate == "medium":
+            Thread(target=self.engines.setSpeedLeft(True, 50000, 10)).start()
+            Thread(target=self.engines.setSpeedRight(True, 50000, 10)).start()
+            Thread(target=self.engines.setSpeedBack(False, 50000, 10)).start()  
+
+        elif rate == "fast":
+            Thread(target=self.engines.setSpeedLeft(True, 50000, 80)).start()
+            Thread(target=self.engines.setSpeedRight(True, 50000, 80)).start()
+            Thread(target=self.engines.setSpeedBack(False, 50000, 10)).start()
+
+        else:
+            print('Error. No rate selected.')      
+
 
     def turnLeft(self, rate):
         Thread(target=self.engines.setSpeedLeft(False, 50000, 5)).start()
         Thread(target=self.engines.setSpeedRight(True, 50000, 5)).start()
         Thread(target=self.engines.setSpeedBack(True, 50000, 10)).start()
+
 
     def turnRight(self, rate):
         Thread(target=self.engines.setSpeedLeft(True, 50000, 5)).start()
