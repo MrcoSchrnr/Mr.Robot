@@ -51,7 +51,7 @@ class VideoStream:
     def stop(self):
 	# Indicate that the camera and thread should be stopped
         self.stopped = True
-        
+
 
 MODEL_NAME = '../Tensorflow/tflite_SDD_64_64/TF_lite_64x64_with_range'       #Folder the .tflite file is located in
 GRAPH_NAME = 'detect.tflite'                                                 #Name of the .tflite file, if different than detect.tflite
@@ -198,3 +198,4 @@ while True:
 # Clean up
 cv2.destroyAllWindows()
 videostream.stop()
+
