@@ -52,6 +52,7 @@ class VideoStream:
         self.stopped = True
 
 
+
 MODEL_NAME = '../Tensorflow/tflite_SDD_64_64/TF_lite_64x64_with_range'       #Folder the .tflite file is located in
 GRAPH_NAME = 'detect.tflite'                                                 #Name of the .tflite file, if different than detect.tflite
 #LABELMAP_NAME = '......'                                                    #Name of the labelmap file, if different than labelmap.txt
@@ -194,53 +195,51 @@ while True:
     time1 = (t2-t1)/freq
     frame_rate_calc= 1/time1
 
-    # Press 'q' to quit
-    if cv2.waitKey(1) == ord('q'):
-        break
 
-# Clean up
-cv2.destroyAllWindows()
-videostream.stop()
-
-    #Get areas of the coordinates
- 
+    #Get area of the coordinates
     def getCoordinates(boxes): 
 
-    # top-left    # top-softleft    # top-middle    # top-softright    # top-right    #
+    #   top-left  #   top-softleft  #  top-middle   #   top-softright  #  top-right   #
     # ------------#-----------------#---------------#------------------#------------- #
     # middle-left # middle-softleft # middle-middle # middle-softright # middle-right #
     # ------------#-----------------#---------------#------------------#------------- #
     # bottom-left # bottom-softleft # bottom-middle # bottom-softright # bottom-right #
 
         
-    #vertical area
+        #vertical area
 
-    #top
-    if(true):
+        #top
+        if(true):
 
-    #middle    
-    if(true):
+        #middle    
+        if(true):
 
-    #bottom
-    if(true):    
-        
+        #bottom
+        if(true):    
+            
 
-    #horizontal area
+        #horizontal area
 
-    #left
-    if(true):
+        #left
+        if(true):
 
-    #softleft
-    if(true):
+        #softleft
+        if(true):
 
-    #middle
-    if(true):
+        #middle
+        if(true):
 
-    #softright
-    if(true):
+        #softright
+        if(true):
 
-    #right
-    if(true):       
+        #right
+        if(true):
+
+
+    #Stop everything
+    def stopAll():
+        cv2.destroyAllWindows()
+        videostream.stop()
        
 
 
