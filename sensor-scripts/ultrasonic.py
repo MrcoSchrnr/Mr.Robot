@@ -20,6 +20,7 @@ def level_changed(gpio_num, level, tick):
     
     run_time = (tick - start_tick - SEND_OFFSET) # micro sec
     dist = (run_time / 2) / 1e6 * SPEED_OF_SOUND
+
     print("Distance: {0:0.2f} m".format(dist))
     print("-----")     
         

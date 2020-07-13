@@ -21,7 +21,7 @@ class VideoStream:
         ret = self.stream.set(4,resolution[1])
 
         # Read first frame from the stream
-        self.grabbed, self.frame) = self.stream.read()
+        (self.grabbed, self.frame) = self.stream.read()
 
         # Variable to control when the camera is stopped
         self.stopped = False

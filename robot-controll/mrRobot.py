@@ -11,6 +11,7 @@ Procedure: 1.init Robot 2.driving forward 3.if cross line -> activate camera 4.d
 import time 
 import pigpio
 from threading import Thread
+import threading
 
 from driving import Driver
 #from sensorControl import AnimalSelector
@@ -86,45 +87,40 @@ class Robot:
     # function inside the area for catching the animal
 
     def catchAnimal(self):                                  # has to be changed
-        self.getSelectedAnimal()
-        self.Scan()
-        self.checkDirection()
-
-        while Sensorfront == False:
-            self.checkDirection()
-
-        else:
-            self.driveForward("slow")
         
-        while NoneAnimalinScreen == False:
-            return true                             # insert function to check if there are other animals in screen and how to get them out of the screen.
-
-        else:
-            self.driveForward("Fast")
-        
-        while self.borderCrossed == False:
-            self.checkBorder()
-
-        else:
-            time.sleep(5)
-            self.stopDriving()
+        print('code for catching the animal has to be implemented')
+        time.sleep(5)
     
     def freeAnimal(self):
-        self.driver.driveBackwards("fast")
-        time.sleep(1)
-        self.driver.stopDriving()
+        startDrivingThread = Thread(target=self.driver.driveForward("medium")).start()
+        lightSensorThread = Thread(target=self.lightSensor.runLineChecker()).start()
+        time.sleep(2)
+
+        startDrivingFasterThread = Thread(target=self.driver.driveForward("fast")).start()
+
+        while lightSensorThread == True:
+            #wait for end of the light sensor thread
+            print('wait for ending of lightSensorScript')
+        
+        time.sleep(2)
+        stopDrivingThread = Thread(target=self.driver.stopDriving()).start()
+
+        driveAwayThread = Thread(target=self.driver.driveBackwards("fast"))
+        time.sleep(2)
+        stopDrivingThread = Thread(target=self.driver.stopDriving()).start()
+
     
     def start(self):
         #getAnimalThread = Thread(target=self.animalSelector.isAnimalSelected())
-        drivingThread = Thread(target=self.driver.driveForward("medium"))
-        lightSensorThread = Thread(target=self.lightSensor.runLineChecker())
+        startDrivingThread = Thread(target=self.driver.driveForward("medium")).start()
+        lightSensorThread = Thread(target=self.lightSensor.runLineChecker()).start()
 
-        # here has to be an if condition for a selected animal. maybe with a while loop for the selected animal for 3 seconds or something like that 
-    
-        
-        lightSensorThread.start()
-        drivingThread.start()
+        while lightSensorThread == True:
+            #wait for end of the light sensor thread
+            time.sleep(1)
+            print('--------------------------------------------------------------------')
 
+        stopDrivingThread = Thread(target=self.driver.stopDriving()).start()
 
     # Let's go robot!
 
@@ -133,14 +129,11 @@ class Robot:
         self.catchAnimal()
         self.freeAnimal()
 
-    def reset(self):                                            # has to be changed
-        return True                     # Function to reset the selected Animal; speed on Wheels and so on. 
-
 
 """
 Testing Area of the Script
 """
 
 TestRobot = Robot()
-TestRobot.start()
+TestRobot.goRobot()
 

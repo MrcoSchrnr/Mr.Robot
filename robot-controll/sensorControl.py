@@ -30,14 +30,13 @@ class LightSensor:
         while self.lineCrossed == False:
             time.sleep(1)
             print("Waiting for crossing Line.")
-            print('--------------------------------------------------------------------')
 
         print('Robot crossed line.')
-        self.stop()
+        #self.stop()
+        self.lineCrossed = False
 
     def stop(self):
         print('Shutting down LightSensor.')
-        print('--------------------------------------------------------------------')
         self.pi.stop()
 
 
