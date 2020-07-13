@@ -202,3 +202,45 @@ while True:
 cv2.destroyAllWindows()
 videostream.stop()
 
+    #Get areas of the coordinates
+ 
+    def getCoordinates(boxes): 
+
+    # top-left    # top-softleft    # top-middle    # top-softright    # top-right    #
+    # ------------#-----------------#---------------#------------------#------------- #
+    # middle-left # middle-softleft # middle-middle # middle-softright # middle-right #
+    # ------------#-----------------#---------------#------------------#------------- #
+    # bottom-left # bottom-softleft # bottom-middle # bottom-softright # bottom-right #
+
+        
+    #vertical area
+
+    #top
+    if(true):
+
+    #middle    
+    if(true):
+
+    #bottom
+    if(true):    
+        
+
+    #horizontal area
+
+    #left
+    if(true):
+
+    #softleft
+    if(true):
+
+    #middle
+    if(true):
+
+    #softright
+    if(true):
+
+    #right
+    if(true):       
+       
+
+
