@@ -164,22 +164,21 @@ class VideoStream:
     '''
 
     def getName(classes):
-        #maybe only numbers --> Convert Index to names [0] --> "Elephant", [1] --> "Tiger"....
+        #maybe only numbers --> Convert Index to names [0] --> "Elephant", [1] --> "Tiger".... TODO: CHECK VALUE OF CLASSES
         return classes
 
     #Get area of the coordinates
     def getCoordinates(boxes): 
 
-    #   top-left  #   top-softleft  #  top-middle   #  top-softright   #  top-right   #
+    #   top-left  #   top-softleft  #  top-middle   #  top-softright   #  top-right   #        TODO: CHECK VALUE OF BOXES
     # ------------#-----------------#---------------#------------------#------------- #
     # middle-left # middle-softleft # middle-middle # middle-softright # middle-right #
     # ------------#-----------------#---------------#------------------#------------- #
     # bottom-left # bottom-softleft # bottom-middle # bottom-softright # bottom-right #
-    
+       
         #first start cam
         start()
-
-        
+       
         #vertical area
 
         #top
