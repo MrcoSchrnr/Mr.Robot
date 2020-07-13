@@ -13,29 +13,21 @@ from threading import Thread
 
 class VideoStream:
 
-     def __init__(self,resolution=(64,64),framerate=30):
+    #resultion must be set in another class
+     def __init__(self):
         # Initialize the PiCamera and the camera image stream
         self.stream = cv2.VideoCapture(0)
         ret = self.stream.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
-        ret = self.stream.set(3,resolution[0])
-        ret = self.stream.set(4,resolution[1])
 
-        # Read first frame from the stream
-        (self.grabbed, self.frame) = self.stream.read()
+    def start(model_name='../Tensorflow/tflite_SDD_64_64/TF_lite_64x64_with_range', resolution='1280x720'):
 
-        # Variable to control when the camera is stopped
-        self.stopped = False
-
-
-    def start():
-
-        MODEL_NAME = '../Tensorflow/tflite_SDD_64_64/TF_lite_64x64_with_range'       #Folder the .tflite file is located in
-        GRAPH_NAME = 'detect.tflite'                                                 #Name of the .tflite file, if different than detect.tflite
-        LABELMAP_NAME = 'labelmap.txt'                                                    #Name of the labelmap file, if different than labelmap.txt
-        min_conf_threshold = 0.5                                                #Minimum confidence threshold for displaying detected objects
-        resW, resH = split('1280x720')                                             #Desired webcam resolution in WxH. If the webcam does not support the resolution entered, errors may occur.
+        MODEL_NAME = model_name          #Folder the .tflite file is located in
+        GRAPH_NAME = 'detect.tflite'     #Name of the .tflite file, if different than detect.tflite
+        LABELMAP_NAME = 'labelmap.txt'   #Name of the labelmap file, if different than labelmap.txt
+        min_conf_threshold = 0.5         #Minimum confidence threshold for displaying detected objects
+        resW, resH = split(resolution)   #Desired webcam resolution in WxH. If the webcam does not support the resolution entered, errors may occur.
         imW, imH = int(resW), int(resH)
-        use_TPU = True                                                           #Use Coral Edge TPU Accelerator to speed up detection
+        use_TPU = True                   #Use Coral Edge TPU Accelerator to speed up detection
 
         # Import TensorFlow libraries
         # If tflite_runtime is installed, import interpreter from tflite_runtime, else import from regular tensorflow
@@ -136,9 +128,8 @@ class VideoStream:
             #num = interpreter.get_tensor(output_details[3]['index'])[0]  # Total number of detected objects (inaccurate and not needed)
 
 
-    def startVideoCam()
+    '''def startVideoCam()
 
-    ''' Video Cam Section '''
         # Loop over all detections and draw detection box if confidence is above minimum threshold
         for i in range(len(scores)):
             if ((scores[i] > min_conf_threshold) and (scores[i] <= 1.0)):
@@ -170,7 +161,11 @@ class VideoStream:
         t2 = cv2.getTickCount()
         time1 = (t2-t1)/freq
         frame_rate_calc= 1/time1
+    '''
 
+    def getName(classes):
+        #maybe only numbers --> Convert Index to names [0] --> "Elephant", [1] --> "Tiger"....
+        return classes
 
     #Get area of the coordinates
     def getCoordinates(boxes): 
