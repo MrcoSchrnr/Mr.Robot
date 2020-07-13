@@ -31,11 +31,11 @@ class VideoStream:
 
         MODEL_NAME = '../Tensorflow/tflite_SDD_64_64/TF_lite_64x64_with_range'       #Folder the .tflite file is located in
         GRAPH_NAME = 'detect.tflite'                                                 #Name of the .tflite file, if different than detect.tflite
-        #LABELMAP_NAME = '......'                                                    #Name of the labelmap file, if different than labelmap.txt
-        #min_conf_threshold = '....'                                                 #Minimum confidence threshold for displaying detected objects
-        #resW, resH = '....'                                              #Desired webcam resolution in WxH. If the webcam does not support the resolution entered, errors may occur.
-        #imW, imH = int(resW), int(resH)
-        #use_TPU = '...'                                                             #Use Coral Edge TPU Accelerator to speed up detection
+        LABELMAP_NAME = 'labelmap.txt'                                                    #Name of the labelmap file, if different than labelmap.txt
+        min_conf_threshold = 0.5                                                #Minimum confidence threshold for displaying detected objects
+        resW, resH = split('1280x720')                                             #Desired webcam resolution in WxH. If the webcam does not support the resolution entered, errors may occur.
+        imW, imH = int(resW), int(resH)
+        use_TPU = True                                                           #Use Coral Edge TPU Accelerator to speed up detection
 
         # Import TensorFlow libraries
         # If tflite_runtime is installed, import interpreter from tflite_runtime, else import from regular tensorflow
