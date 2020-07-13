@@ -175,11 +175,14 @@ class VideoStream:
     #Get area of the coordinates
     def getCoordinates(boxes): 
 
-    #   top-left  #   top-softleft  #  top-middle   #   top-softright  #  top-right   #
+    #   top-left  #   top-softleft  #  top-middle   #  top-softright   #  top-right   #
     # ------------#-----------------#---------------#------------------#------------- #
     # middle-left # middle-softleft # middle-middle # middle-softright # middle-right #
     # ------------#-----------------#---------------#------------------#------------- #
     # bottom-left # bottom-softleft # bottom-middle # bottom-softright # bottom-right #
+    
+        #first start cam
+        start()
 
         
         #vertical area
