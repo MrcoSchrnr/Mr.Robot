@@ -12,25 +12,57 @@ class Driver:
         self.engines = Engines()
 
 
-    # minimum duty cycle on wood ground is 5 that the robot moves. 
+    # duty cycle for slow = 5
+    # duty cycle for medium = 10
+    # duty cycle for fast = 90
 
 
     def driveForward(self, rate):
 
         if rate == "slow":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 5)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 5)).start()
-            Thread(target=self.engines.stopEngineBack()).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 5])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 5])
+            engineBackThread = Thread(target=self.engines.stopEngineBack)  
+
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         elif rate == "medium":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 10)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 10)).start()
-            Thread(target=self.engines.stopEngineBack()).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 10])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 10])
+            engineBackThread = Thread(target=self.engines.stopEngineBack) 
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         elif rate == "fast":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 90)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 90)).start()
-            Thread(target=self.engines.stopEngineBack()).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 90])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 90])
+            engineBackThread = Thread(target=self.engines.stopEngineBack) 
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         else:
             print('Error. No rate selected.')          
@@ -39,19 +71,49 @@ class Driver:
     def driveBackwards(self, rate):
 
         if rate == "slow":
-            Thread(target=self.engines.setSpeedLeft(False, 50000, 5)).start()
-            Thread(target=self.engines.setSpeedRight(False, 50000, 5)).start()
-            Thread(target=self.engines.stopEngineBack()).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[False, 50000, 5])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[False, 50000, 5])
+            engineBackThread = Thread(target=self.engines.stopEngineBack) 
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         elif rate == "medium":
-            Thread(target=self.engines.setSpeedLeft(False, 50000, 10)).start()
-            Thread(target=self.engines.setSpeedRight(False, 50000, 10)).start()
-            Thread(target=self.engines.stopEngineBack()).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[False, 50000, 10])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[False, 50000, 10])
+            engineBackThread = Thread(target=self.engines.stopEngineBack) 
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         elif rate == "fast":
-            Thread(target=self.engines.setSpeedLeft(False, 50000, 90)).start()
-            Thread(target=self.engines.setSpeedRight(False, 50000, 90)).start()
-            Thread(target=self.engines.stopEngineBack()).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[False, 50000, 90])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[False, 50000, 90])
+            engineBackThread = Thread(target=self.engines.stopEngineBack) 
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         else:
             print('Error. No rate selected.') 
@@ -59,19 +121,49 @@ class Driver:
 
     def driveLeft(self, rate):
         if rate == "slow":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 5)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 5)).start()
-            Thread(target=self.engines.setSpeedBack(True, 50000, 10)).start()
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 5])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 5])
+            engineBackThread = Thread(target=self.engines.setSpeedBack, args=[True, 50000, 10])
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         elif rate == "medium":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 10)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 10)).start()
-            Thread(target=self.engines.setSpeedBack(True, 50000, 10)).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 10])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 10])
+            engineBackThread = Thread(target=self.engines.setSpeedBack, args=[True, 50000, 10]) 
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         elif rate == "fast":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 80)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 80)).start()
-            Thread(target=self.engines.setSpeedBack(True, 50000, 10)).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 90])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 90])
+            engineBackThread = Thread(target=self.engines.setSpeedBack, args=[True, 50000, 10]) 
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         else:
             print('Error. No rate selected.')      
@@ -79,34 +171,84 @@ class Driver:
 
     def driveRight(self, rate):
         if rate == "slow":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 5)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 5)).start()
-            Thread(target=self.engines.setSpeedBack(False, 50000, 10)).start()
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 5])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 5])
+            engineBackThread = Thread(target=self.engines.setSpeedBack, args=[False, 50000, 10])
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         elif rate == "medium":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 10)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 10)).start()
-            Thread(target=self.engines.setSpeedBack(False, 50000, 10)).start()  
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 10])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 10])
+            engineBackThread = Thread(target=self.engines.setSpeedBack, args=[False, 50000, 10]) 
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         elif rate == "fast":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 80)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 80)).start()
-            Thread(target=self.engines.setSpeedBack(False, 50000, 10)).start()
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 90])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 90])
+            engineBackThread = Thread(target=self.engines.setSpeedBack, args=[False, 50000, 10])
+            
+            # start all threads
+            engineLeftThread.start()
+            engineRightThread.start()
+            engineBackThread.start()
+
+            # synchronize all threads
+            engineLeftThread.join()
+            engineRightThread.join()
+            engineBackThread.join()
 
         else:
             print('Error. No rate selected.')      
 
 
     def turnLeft(self, rate):
-        Thread(target=self.engines.setSpeedLeft(False, 50000, 5)).start()
-        Thread(target=self.engines.setSpeedRight(True, 50000, 5)).start()
-        Thread(target=self.engines.setSpeedBack(True, 50000, 10)).start()
+        engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[False, 50000, 5])
+        engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 5])
+        engineBackThread = Thread(target=self.engines.setSpeedBack, args=[True, 50000, 10])
+        
+        # start all threads
+        engineLeftThread.start()
+        engineRightThread.start()
+        engineBackThread.start()
+
+        # synchronize all threads
+        engineLeftThread.join()
+        engineRightThread.join()
+        engineBackThread.join()
 
 
     def turnRight(self, rate):
-        Thread(target=self.engines.setSpeedLeft(True, 50000, 5)).start()
-        Thread(target=self.engines.setSpeedRight(False, 50000, 5)).start()
-        Thread(target=self.engines.setSpeedBack(False, 50000, 10)).start()  
+        engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 5])
+        engineRightThread = Thread(target=self.engines.setSpeedRight, args=[False, 50000, 5])
+        engineBackThread = Thread(target=self.engines.setSpeedBack, args=[False, 50000, 10])
+                
+        # start all threads
+        engineLeftThread.start()
+        engineRightThread.start()
+        engineBackThread.start()
+
+        # synchronize all threads
+        engineLeftThread.join()
+        engineRightThread.join()
+        engineBackThread.join()
 
 
     def stopDriving(self):
