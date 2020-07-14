@@ -5,122 +5,131 @@ Teammembers: Marco Schreiner, Max Sauer, Boas Luke Ruoss, Marco Zimmerer, Peter 
 
 """
 Procedure: 1.init Robot 2.driving forward 3.if cross line -> activate camera 4.drive to animal + actiavate ultrasonic sensor
-           5.if ultraonsic scan animal -> drive forward for fleeing animal + deativate ultrasonic + activate lightsensor 6. if across the line, timesleep 5sec + drive backwards
+           5.if ultraonsic scan animal -> drive forward for fleeing animal + deativate ultrasonic + activate lineSensor 6. if across the line, timesleep 5sec + drive backwards
 """
 
 import time 
 import pigpio
-from threading import Thread
 import threading
-
+from subprocess import call
 from driving import Driver
-#from sensorControl import AnimalSelector
-from sensorControl import LightSensor
-#from sensorControl import UltraSensor
-
-
-"""
-Area Pinouts
-"""
-
-# Maybe ON/OFF
-
-# Switch
-
-GPIO_IN_Elephant = 0 # Switchposition 1 - Elephant          TODO: Check right Pin for X
- 
-GPIO_IN_Tiger = 0    # Switchposition 2 - Tiger
-
-GPIO_IN_Star = 0     # Switchposition 3 - Star              TODO: Check right Pin for X
- 
-GPIO_IN_Cat = 5      # Switchposition 4 - Cat               TODO: Check right Pin for X
-
-GPIO_IN_Frog = 0     # Switchposition 5 - Frog              TODO: Check right Pin for X
-
-
-# Ultrasonic - @pre pigpio demon must be running (sudo pigpiod)
-
-GPIO_Ultra_ECHO = 17 # ultrasonic sensor input pin (echo)
-GPIO_Ultra_TRIG = 26 # ultrasonic sensor output pin (trigger)
-
-
-"""
-End of Area Pinouts
-"""
+from sensorControl import AnimalSelector
+from sensorControl import LineSensor
 
 class Robot:
         
     def __init__(self, selectedAnimal = "none"):
         self.selectedAnimal = selectedAnimal
         self.driver = Driver()
-        self.lightSensor = LightSensor()
-        #self.ultraSensor = UltraSensor()
-        #self.animalSelector = AnimalSelector()
-
-
-    # functions for sensors 
-
-    def getSelectedAnimal(self):                            #TAKE CARE! Signal 0 = On. Signal 1 = OFF.
-        
-        self.pi = pigpio.pi()  
-
-        selectedAnimal = "none"
-      
-        if self.pi.read(GPIO_IN_Elephant) == 0:
-            selectedAnimal = "Elephant"        
-
-        if self.pi.read(GPIO_IN_Tiger) == 0:
-            selectedAnimal = "Tiger"
-
-        if self.pi.read(GPIO_IN_Frog) == 0:
-            selectedAnimal = "Frog"
-
-        if self.pi.read(GPIO_IN_Cat) == 0:
-            selectedAnimal = "Cat"
-
-        if self.pi.read(GPIO_IN_Star) == 0:
-            selectedAnimal = "Star"
-
-        print("You choose the " + selectedAnimal)
-        return selectedAnimal 
-
-    # function inside the area for catching the animal
-
-    def catchAnimal(self):                                  # has to be changed
-        
-        print('code for catching the animal has to be implemented')
-        time.sleep(5)
-    
-    def freeAnimal(self):
-        startDrivingThread = Thread(target=self.driver.driveForward("medium")).start()
-        lightSensorThread = Thread(target=self.lightSensor.runLineChecker()).start()
-        time.sleep(2)
-
-        startDrivingFasterThread = Thread(target=self.driver.driveForward("fast")).start()
-
-        while lightSensorThread == True:
-            #wait for end of the light sensor thread
-            print('wait for ending of lightSensorScript')
-        
-        time.sleep(2)
-        stopDrivingThread = Thread(target=self.driver.stopDriving()).start()
-
-        driveAwayThread = Thread(target=self.driver.driveBackwards("fast"))
-        time.sleep(2)
-        stopDrivingThread = Thread(target=self.driver.stopDriving()).start()
+        self.lineSensor = LineSensor()
+        self.animalSelector = AnimalSelector()
+        self.pi = pigpio.pi()
 
     
     def start(self):
-        #getAnimalThread = Thread(target=self.animalSelector.isAnimalSelected())
-        startDrivingThread = Thread(target=self.driver.driveForward("medium")).start()
-        lightSensorThread = Thread(target=self.lightSensor.runLineChecker()).start()
 
-        while lightSensorThread == True:
-            #wait for end of the light sensor thread
-            time.sleep(1)
+        self.animalSelector.getSelectedAnimal()
+
+        if self.animalSelector.selectedAnimal == "none":
+            call('sudo shutdown', shell=True)
+
+        print(self.animalSelector.selectedAnimal)
+
+        
+        drivingThread = threading.Thread(target=self.driver.driveForward("fast")).start()
+        self.lineSensor.runLineChecker()
+        
+        while self.lineSensor.lineCrossed == False:
+            #wait for crossing the line
             print('--------------------------------------------------------------------')
 
-        stopDrivingThread = Thread(target=self.driver.stopDriving()).start()
+        self.driver.stopDriving()
+
+        print('--------------------------------------------------------------------')
+        print('finished starting function')
+        print('--------------------------------------------------------------------')
+
+
+    def catchAnimal(self):                                  # has to be changed
+        
+        drivingThread = threading.Thread(target=self.driver.driveForward("medium"))
+
+        #detectionThread = threading.Thread(target=XXX)
+
+
+        drivingThread.start()
+        #detectionThread.start()
+
+        animalCatched = False
+
+        while animalCatched == False:       #animal is in middle-bottom area of camera
+
+            if animalScan == [self.animalSelector.selectedAnimal, "left", "top"] || animalScan == [self.animalSelector.selectedAnimal, "left", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "left", "bottom"]:
+                self.driver.turnLeft("slow")
+                time.sleep(0.5)
+                self.driver.driveForward("slow")
+                pass
+
+            elif animalScan == [self.animalSelector.selectedAnimal, "right", "top"] || animalScan == [self.animalSelector.selectedAnimal, "right", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "right", "bottom"]:
+                self.driver.turnRight("slow")
+                time.sleep(0.5)
+                self.driver.driveForward("slow")
+                pass
+
+            elif animalScan == [self.animalSelector.selectedAnimal, "middle", "top"]:
+                self.driver.driveForward("fast")
+                time.sleep(1)
+                pass
+
+            elif animalScan == [self.animalSelector.selectedAnimal, "middle", "middle"]:
+                self.driver.driveForward("medium")
+                time.sleep(1)
+                pass
+
+            elif animalScan == [self.animalSelector.selectedAnimal, "middle", "bottom"]:
+                time.sleep(1)           #maybe should continue driving for 1 seconds that the animal is for sure in front of the robot
+                animalCatched = True
+
+            else:
+                print("something went wrong. Pi will Shutdown now")
+                self.pi.stop()
+
+        self.driver.stopDriving()
+
+        print('--------------------------------------------------------------------')
+        print('finished catching function')
+        print('--------------------------------------------------------------------')
+
+
+    def freeAnimal(self):
+
+        drivingThread = threading.Thread(target=self.driver.driveForward("fast"))
+
+        drivingThread.start()
+        self.lineSensor.runLineChecker()
+
+        while self.lineSensor.lineCrossed == False:
+            #wait for crossing the line
+            print('--------------------------------------------------------------------')
+        
+        time.sleep(0.5)
+        drivingThread = threading.Thread(target=self.driver.stopDriving()).start()
+        print('--------------------------------------------------------------------')
+        print('Robot is stopped')        
+        print('--------------------------------------------------------------------')
+        time.sleep(1)
+        drivingThread = threading.Thread(target=self.driver.driveBackwards("fast")).start()
+        print('--------------------------------------------------------------------')
+        print('Robot will drive away from the animal')
+        print('--------------------------------------------------------------------')
+        time.sleep(2)
+        drivingThread = threading.Thread(target=self.driver.stopDriving()).start()
+        print('--------------------------------------------------------------------')
+        print('Robot is stopped | finished catching animal, shutting down Pi...')
+        print('--------------------------------------------------------------------')
+        time.sleep(5)
+        print("just joking ;)")
+
 
     # Let's go robot!
 
@@ -135,5 +144,7 @@ Testing Area of the Script
 """
 
 TestRobot = Robot()
-TestRobot.goRobot()
+#TestRobot.goRobot()
+TestRobot.start()
+TestRobot.freeAnimal()
 
