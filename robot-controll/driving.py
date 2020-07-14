@@ -28,8 +28,8 @@ class Driver:
             Thread(target=self.engines.stopEngineBack()).start()  
 
         elif rate == "fast":
-            Thread(target=self.engines.setSpeedLeft(True, 50000, 80)).start()
-            Thread(target=self.engines.setSpeedRight(True, 50000, 80)).start()
+            Thread(target=self.engines.setSpeedLeft(True, 50000, 90)).start()
+            Thread(target=self.engines.setSpeedRight(True, 50000, 90)).start()
             Thread(target=self.engines.stopEngineBack()).start()  
 
         else:
@@ -49,8 +49,8 @@ class Driver:
             Thread(target=self.engines.stopEngineBack()).start()  
 
         elif rate == "fast":
-            Thread(target=self.engines.setSpeedLeft(False, 50000, 80)).start()
-            Thread(target=self.engines.setSpeedRight(False, 50000, 80)).start()
+            Thread(target=self.engines.setSpeedLeft(False, 50000, 90)).start()
+            Thread(target=self.engines.setSpeedRight(False, 50000, 90)).start()
             Thread(target=self.engines.stopEngineBack()).start()  
 
         else:
@@ -111,3 +111,6 @@ class Driver:
 
     def stopDriving(self):
         self.engines.stopAllEngines()
+
+#TestDriver = Driver()
+#TestDriver.stopDriving()
