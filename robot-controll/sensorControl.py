@@ -1,7 +1,5 @@
 import pigpio
 import time
-import threading
-import functools
 
 class AnimalSelector:
 
@@ -59,18 +57,17 @@ class AnimalSelector:
 
                 else:
                     print("Something went wrong. Please check the selected Pin")
-
-                break
+                    break
 
             else:
                 pass
 
 
 
-class LightSensor:
+class LineSensor:
 
     def __init__(self, GPIO_LIGHT = 3, colorStop = 1):
-        self.GPIO_LIGHT = GPIO_LIGHT # Lightsensor GPIO pin
+        self.GPIO_LIGHT = GPIO_LIGHT # LineSensor GPIO pin
         self.colorStop = colorStop # returns 1 for black and 0 for WHITE
         self.pi = pigpio.pi()
         self.lineCrossed = False
@@ -84,18 +81,16 @@ class LightSensor:
 
 
     def runLineChecker(self):
-        
+        self.lineCrossed = False
+
         self.pi.set_mode(self.GPIO_LIGHT, pigpio.INPUT)
         cb = self.pi.callback(self.GPIO_LIGHT, pigpio.RISING_EDGE, self.levelChanged)
         
         while self.lineCrossed == False:
-            time.sleep(1)
+            time.sleep(0.5)
             print("Waiting for crossing Line.")
 
         print('Robot crossed line.')
-        #self.stop()
-        self.lineCrossed = False
-
-    def stop(self):
-        print('Shutting down LightSensor.')
-        self.pi.stop()
+        print('--------------------------------------------------------------------')
+        time.sleep(2)
+    
