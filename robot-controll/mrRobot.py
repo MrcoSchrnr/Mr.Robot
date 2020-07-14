@@ -10,7 +10,7 @@ Procedure: 1.init Robot 2.driving forward 3.if cross line -> activate camera 4.d
 
 import time 
 import pigpio
-import threading
+from threading import Thread
 from subprocess import call
 from driving import Driver
 from sensorControl import AnimalSelector
@@ -35,26 +35,32 @@ class Robot:
 
         print(self.animalSelector.selectedAnimal)
 
-        
-        drivingThread = threading.Thread(target=self.driver.driveForward("fast")).start()
-        self.lineSensor.runLineChecker()
+        lineSensorThread = Thread(target=self.lineSensor.runLineChecker)
+        drivingThread = Thread(target=self.driver.driveForward, args=["fast"])
+
+        drivingThread.start()
+        lineSensorThread.start()
+
+        drivingThread.join()
+        lineSensorThread.join()
         
         while self.lineSensor.lineCrossed == False:
             #wait for crossing the line
             print('--------------------------------------------------------------------')
 
+        drivingThread._stop()
         self.driver.stopDriving()
 
         print('--------------------------------------------------------------------')
         print('finished starting function')
         print('--------------------------------------------------------------------')
 
-
+    """
     def catchAnimal(self):                                  # has to be changed
         
-        drivingThread = threading.Thread(target=self.driver.driveForward("medium"))
+        drivingThread = Thread(target=self.driver.driveForward("medium"))
 
-        #detectionThread = threading.Thread(target=XXX)
+        #detectionThread = Thread(target=XXX)
 
 
         drivingThread.start()
@@ -99,35 +105,49 @@ class Robot:
         print('--------------------------------------------------------------------')
         print('finished catching function')
         print('--------------------------------------------------------------------')
-        
-
+    """   
 
     def freeAnimal(self):
+        
+        lineSensorThread = Thread(target=self.lineSensor.runLineChecker)
+        drivingThread = Thread(target=self.driver.driveForward, args=["fast"])
 
-        drivingThread = threading.Thread(target=self.driver.driveForward("fast"))
-
+        lineSensorThread.start()
         drivingThread.start()
-        self.lineSensor.runLineChecker()
+
+        lineSensorThread.join()
+        drivingThread.join()
 
         while self.lineSensor.lineCrossed == False:
             #wait for crossing the line
             print('--------------------------------------------------------------------')
         
+        drivingThread._stop()
+
         time.sleep(0.5)
-        drivingThread = threading.Thread(target=self.driver.stopDriving()).start()
+        drivingThread = Thread(target=self.driver.stopDriving)
+        drivingThread.start()
         print('--------------------------------------------------------------------')
         print('Robot is stopped')        
         print('--------------------------------------------------------------------')
         time.sleep(1)
-        drivingThread = threading.Thread(target=self.driver.driveBackwards("fast")).start()
+        drivingThread._stop()
+
+        drivingThread = Thread(target=self.driver.driveBackwards, args=["fast"])
+        drivingThread.start()
         print('--------------------------------------------------------------------')
         print('Robot will drive away from the animal')
         print('--------------------------------------------------------------------')
         time.sleep(2)
-        drivingThread = threading.Thread(target=self.driver.stopDriving()).start()
+        drivingThread._stop()
+
+        drivingThread = Thread(target=self.driver.stopDriving)
+        drivingThread.start()
         print('--------------------------------------------------------------------')
         print('Robot is stopped | finished catching animal, shutting down Pi...')
         print('--------------------------------------------------------------------')
+        drivingThread._stop()
+        
         time.sleep(5)
         print("just joking ;)")
         time.sleep(1)
@@ -153,5 +173,5 @@ Testing Area of the Script
 TestRobot = Robot()
 #TestRobot.goRobot()
 TestRobot.start()
-TestRobot.freeAnimal()
+#TestRobot.freeAnimal()
 
