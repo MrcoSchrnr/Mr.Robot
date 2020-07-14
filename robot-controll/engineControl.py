@@ -162,10 +162,6 @@ class Engines:
         engineBack.start()
         engineLeft.start()
         engineRight.start()
-        
-        engineBack._stop()
-        engineBack._stop()
-        engineBack._stop()
 
     """ 
         in this area there are some additional funtions for shutting down the engines and getting the current data of the engines
