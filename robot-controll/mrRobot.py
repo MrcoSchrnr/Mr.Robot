@@ -99,7 +99,10 @@ class Robot:
         print('--------------------------------------------------------------------')
         print('finished catching function')
         print('--------------------------------------------------------------------')
-
+        
+        #shut down Pi for new Round
+        time.sleep(5)
+        call('sudo shutdown', shell=True)
 
     def freeAnimal(self):
 
