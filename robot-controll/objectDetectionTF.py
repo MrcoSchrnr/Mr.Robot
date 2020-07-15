@@ -12,7 +12,7 @@ import time
 from threading import Thread
 
 class VideoStream:
-
+'''
     #resultion must be set in another class
      def __init__(self):
         # Initialize the PiCamera and the camera image stream
@@ -45,7 +45,7 @@ class VideoStream:
         # If using Edge TPU, assign filename for Edge TPU model
         if use_TPU:
             # If user has specified the name of the .tflite file, use that name, otherwise use default 'edgetpu.tflite'
-            if (GRAPH_NAME == 'detect.tflite'):
+            if GRAPH_NAME == 'detect.tflite':
                 GRAPH_NAME = 'edgetpu.tflite'       
 
         # Get path to current working directory
@@ -128,7 +128,7 @@ class VideoStream:
             #num = interpreter.get_tensor(output_details[3]['index'])[0]  # Total number of detected objects (inaccurate and not needed)
 
 
-    '''def startVideoCam()
+    def startVideoCam()
 
         # Loop over all detections and draw detection box if confidence is above minimum threshold
         for i in range(len(scores)):
@@ -161,7 +161,7 @@ class VideoStream:
         t2 = cv2.getTickCount()
         time1 = (t2-t1)/freq
         frame_rate_calc= 1/time1
-    '''
+    
 
     def getName(classes):
         #maybe only numbers --> Convert Index to names [0] --> "Elephant", [1] --> "Tiger".... TODO: CHECK VALUE OF CLASSES
@@ -208,11 +208,10 @@ class VideoStream:
         #right
         if(true):
 
-
-    #Stop everything
-    def stopAll():
+        #Stop everything
+        def stopAll():
         cv2.destroyAllWindows()
         videostream.stop()
-       
+    '''
 
 
