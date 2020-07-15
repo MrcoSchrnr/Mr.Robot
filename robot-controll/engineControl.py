@@ -155,17 +155,18 @@ class Engines:
 
 
     def stopAllEngines(self):
-        engineBack = Thread(target=self.stopEngineBack())
-        engineLeft = Thread(target=self.stopEngineLeft())
-        engineRight = Thread(target=self.stopEngineRight())
+        engineBack = Thread(target=self.stopEngineBack)
+        engineLeft = Thread(target=self.stopEngineLeft)
+        engineRight = Thread(target=self.stopEngineRight)
 
         engineBack.start()
         engineLeft.start()
         engineRight.start()
-        
-        engineBack._stop()
-        engineBack._stop()
-        engineBack._stop()
+
+        engineBack.join()
+        engineLeft.join()
+        engineRight.join()
+
 
     """ 
         in this area there are some additional funtions for shutting down the engines and getting the current data of the engines
