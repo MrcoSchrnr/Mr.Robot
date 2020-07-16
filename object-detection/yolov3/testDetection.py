@@ -37,9 +37,9 @@ if device is "pc":
     myWidth = 1280
     myHeight = 720
     fps_limit = 30
-    my_buffer_size = 4
+    my_buffer_size = 4 
     
-# Networks
+# Networks  
 networks = {}
 networks["256_version"] = {"folder": "256_version", "resolution": 256,
                      "weights": "yolov3-tiny_last.weights"}
