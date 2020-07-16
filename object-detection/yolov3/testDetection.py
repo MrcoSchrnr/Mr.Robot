@@ -42,7 +42,7 @@ if device is "pc":
 # Networks  
 networks = {}
 networks["256_version"] = {"folder": "256_version", "resolution": 256,
-                     "weights": "yolov3-tiny_last.weights"}
+                     "weights": "yolov3-tiny.weights"}
 #networks["64_v5"] = {"folder": "64_v5", "resolution": 64,
 #                     "weights": "team5_14000.weights"}
 #networks["64_v4"] = {"folder": "64_v4", "resolution": 64,
@@ -70,7 +70,7 @@ cv2.moveWindow(winname, 10, 10)
 
 # load the class labels our YOLO model was trained on
 labelsPath = os.path.sep.join(["yolov3", selectedNetwork["folder"],
-                               "coco.names"])
+                               "obj.names"])
 LABELS = open(labelsPath).read().strip().split("\n")
 
 # initialize a list of colors to represent each possible class label
@@ -80,7 +80,7 @@ COLORS = np.random.randint(0, 255, size=(len(LABELS), 3), dtype="uint8")
 # derive the paths to the YOLO weights and model configuration
 weightsPath = os.path.sep.join(["yolov3", selectedNetwork["folder"],
                                 selectedNetwork["weights"] ])
-configPath = os.path.sep.join(["yolov3", selectedNetwork["folder"],"yolov3-tiny_test.cfg"])
+configPath = os.path.sep.join(["yolov3", selectedNetwork["folder"],"yolov3-tiny.cfg"])
 
 # load our trained YOLO object detector (5 classes)
 # and determine only the *output* layer names that we need from YOLO
