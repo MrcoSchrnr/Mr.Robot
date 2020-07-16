@@ -8,7 +8,7 @@ import imutils
 current_fps = 0
 myFrame = 0
 
-myConfidence = 0.76
+myConfidence = 0.4
 myThreshold = 0.4
 
 limitCPUtemp = True
@@ -20,15 +20,13 @@ limitToVideoFPS = False
 createOutput = False
 
 device = "pi"
-#device = "pc"
+# device = "pc"
 
 if device is "pi":
     from gpiozero import CPUTemperature
     limitToVideoFPS = True
-   # myWidth = 640
-   # myHeight = 480
-    myWidth = 256
-    myHeight = 192
+    myWidth = 640
+    myHeight = 480
     fps_limit = 5
     my_buffer_size = 1  # number of frames in buffer
 
@@ -37,22 +35,15 @@ if device is "pc":
     myWidth = 1280
     myHeight = 720
     fps_limit = 30
-    my_buffer_size = 4 
+    my_buffer_size = 4
     
-# Networks  
+# Networks
 networks = {}
-networks["256_version"] = {"folder": "256_version", "resolution": 256,
-                     "weights": "yolov3-tiny.weights"}
-#networks["64_v5"] = {"folder": "64_v5", "resolution": 64,
-#                     "weights": "team5_14000.weights"}
-#networks["64_v4"] = {"folder": "64_v4", "resolution": 64,
-#                     "weights": "yolov3-tiny_last.weights"}
-#networks["64_v3"] = {"folder": "64_v3", "resolution": 64,
-#                     "weights": "yolov3-tiny_last.weights"}
-#networks["64_v2"] = {"folder": "64_v2", "resolution": 64,
-#                     "weights": "yolov3-tiny_last.weights"}
 
-selectedNetwork = networks["256_version"]
+networks["64_v4"] = {"folder": "64_v4", "resolution": 256,
+                     "weights": "yolov3-tiny_last.weights"}
+
+selectedNetwork = networks["64_v4"]
 
 # Video Inputs
 # myInput = "../videos/test-video1.mp4"
@@ -70,7 +61,7 @@ cv2.moveWindow(winname, 10, 10)
 
 # load the class labels our YOLO model was trained on
 labelsPath = os.path.sep.join(["yolov3", selectedNetwork["folder"],
-                               "obj.names"])
+                               "team5.names"])
 LABELS = open(labelsPath).read().strip().split("\n")
 
 # initialize a list of colors to represent each possible class label
@@ -80,7 +71,7 @@ COLORS = np.random.randint(0, 255, size=(len(LABELS), 3), dtype="uint8")
 # derive the paths to the YOLO weights and model configuration
 weightsPath = os.path.sep.join(["yolov3", selectedNetwork["folder"],
                                 selectedNetwork["weights"] ])
-configPath = os.path.sep.join(["yolov3", selectedNetwork["folder"],"yolov3-tiny.cfg"])
+configPath = os.path.sep.join(["yolov3", selectedNetwork["folder"],"team5.cfg"])
 
 # load our trained YOLO object detector (5 classes)
 # and determine only the *output* layer names that we need from YOLO
@@ -235,3 +226,4 @@ while True:
 
 vs.release()
 cv2.destroyAllWindows()
+
