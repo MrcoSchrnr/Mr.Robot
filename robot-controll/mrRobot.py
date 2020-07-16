@@ -31,7 +31,9 @@ class Robot:
         self.animalSelector.getSelectedAnimal()
 
         if self.animalSelector.selectedAnimal == "none":
-            call('sudo shutdown', shell=True)
+            print("Something went wront. Shutting down RPi.")
+            time.sleep(5)
+            call('sudo shutdown -h now', shell=True)
 
         print(self.animalSelector.selectedAnimal)
 
