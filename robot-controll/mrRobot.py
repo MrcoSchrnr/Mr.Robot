@@ -76,11 +76,25 @@ class Robot:
 
         while animalCatched == False: #animal is in middle-bottom area of camera
 
-            #TODO LOOP over Animals with properties
+            #CHECK ANIMALS 
 
-            labels = ObjDetection.get_label_map
+            #class id 0 = elephant
+            #class id 1 = tiger
+            #class id 2 = star
+            #class id 3 = cat 
+            #class id 4 = frog 
 
-            #dummy = labels["classes"]
+            labels = ObjDetection.get_label_map()
+
+            if labels is not None and len(labels["classIds"]) > 0: #No animals found + exit
+                delta = labels["delta"] #time to valid an animal
+                print("Detected animals:")
+                print(labels["classIds"]) 
+
+                #TODO Loop over the array (over all founded animals)
+                
+                #TODO Get name of selected animal and check if in labels.
+
 
         #     if animalScan == [self.animalSelector.selectedAnimal, "left", "top"] || animalScan == [self.animalSelector.selectedAnimal, "left", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "left", "bottom"]:
         #         self.driver.turnLeft("slow")
@@ -112,11 +126,11 @@ class Robot:
         #         print("something went wrong. Pi will Shutdown now")
         #         self.pi.stop()
 
-        # self.driver.stopDriving()
+            # self.driver.stopDriving()
 
-        print('--------------------------------------------------------------------')
-        print('finished catching function')
-        print('--------------------------------------------------------------------')
+            print('--------------------------------------------------------------------')
+            print('finished catching function')
+            print('--------------------------------------------------------------------')
      
 
     def freeAnimal(self):
