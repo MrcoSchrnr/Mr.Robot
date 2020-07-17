@@ -15,6 +15,7 @@ from subprocess import call
 from driving import Driver
 from sensorControl import AnimalSelector
 from sensorControl import LineSensor
+import objectDetection
 
 class Robot:
         
@@ -69,49 +70,49 @@ class Robot:
 
        
         #Init ObjectDetection
-        ObjDetection = objectDetection.ObjectDetection("../object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "../object-detection/yolov3/yolov3/64_v4/team5.names", "../object-detection/yolov3/yolov3/64_v4/team5.cfg", 265, 192)
+        ObjDetection = objectDetection.Detector("../object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "../object-detection/yolov3/yolov3/64_v4/team5.names", "../object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192)
 
         animalCatched = False
 
-        while animalCatched == False:       #animal is in middle-bottom area of camera
+        while animalCatched == False: #animal is in middle-bottom area of camera
 
             #TODO LOOP over Animals with properties
 
-            labels = ObjDetection.getLabels()
+            labels = ObjDetection.get_label_map
 
-            dummy = labels["classes"]
+            #dummy = labels["classes"]
 
-            if animalScan == [self.animalSelector.selectedAnimal, "left", "top"] || animalScan == [self.animalSelector.selectedAnimal, "left", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "left", "bottom"]:
-                self.driver.turnLeft("slow")
-                time.sleep(0.5)
-                self.driver.driveForward("slow")
-                pass
+        #     if animalScan == [self.animalSelector.selectedAnimal, "left", "top"] || animalScan == [self.animalSelector.selectedAnimal, "left", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "left", "bottom"]:
+        #         self.driver.turnLeft("slow")
+        #         time.sleep(0.5)
+        #         self.driver.driveForward("slow")
+        #         pass
 
-            elif animalScan == [self.animalSelector.selectedAnimal, "right", "top"] || animalScan == [self.animalSelector.selectedAnimal, "right", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "right", "bottom"]:
-                self.driver.turnRight("slow")
-                time.sleep(0.5)
-                self.driver.driveForward("slow")
-                pass
+        #     elif animalScan == [self.animalSelector.selectedAnimal, "right", "top"] || animalScan == [self.animalSelector.selectedAnimal, "right", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "right", "bottom"]:
+        #         self.driver.turnRight("slow")
+        #         time.sleep(0.5)
+        #         self.driver.driveForward("slow")
+        #         pass
 
-            elif animalScan == [self.animalSelector.selectedAnimal, "middle", "top"]:
-                self.driver.driveForward("fast")
-                time.sleep(1)
-                pass
+        #     elif animalScan == [self.animalSelector.selectedAnimal, "middle", "top"]:
+        #         self.driver.driveForward("fast")
+        #         time.sleep(1)
+        #         pass
 
-            elif animalScan == [self.animalSelector.selectedAnimal, "middle", "middle"]:
-                self.driver.driveForward("medium")
-                time.sleep(1)
-                pass
+        #     elif animalScan == [self.animalSelector.selectedAnimal, "middle", "middle"]:
+        #         self.driver.driveForward("medium")
+        #         time.sleep(1)
+        #         pass
 
-            elif animalScan == [self.animalSelector.selectedAnimal, "middle", "bottom"]:
-                time.sleep(1)           #maybe should continue driving for 1 seconds that the animal is for sure in front of the robot
-                animalCatched = True
+        #     elif animalScan == [self.animalSelector.selectedAnimal, "middle", "bottom"]:
+        #         time.sleep(1)           #maybe should continue driving for 1 seconds that the animal is for sure in front of the robot
+        #         animalCatched = True
 
-            else:
-                print("something went wrong. Pi will Shutdown now")
-                self.pi.stop()
+        #     else:
+        #         print("something went wrong. Pi will Shutdown now")
+        #         self.pi.stop()
 
-        self.driver.stopDriving()
+        # self.driver.stopDriving()
 
         print('--------------------------------------------------------------------')
         print('finished catching function')
@@ -183,6 +184,7 @@ Testing Area of the Script
 
 TestRobot = Robot()
 #TestRobot.goRobot()
-TestRobot.start()
+#TestRobot.start()
+TestRobot.catchAnimal()
 #TestRobot.freeAnimal()
 

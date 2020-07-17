@@ -11,6 +11,7 @@ class Detector():
     def __init__(self, weights, labels, config, resW, resH, treshhold = 0.4, cpu_temp_limit = 70):
         self.limitCPUtemp = True
         self.weights = weights
+        self.labels = labels
         self.config = config
         self.resH = resH
         self.resW = resW
@@ -22,12 +23,14 @@ class Detector():
         myInput = 0
 
         # load the class labels our YOLO model was trained on
-        labelsPath = labels
+        labelsPath = self.labels
         LABELS = open(labelsPath).read().strip().split("\n")
 
         # derive the paths to the YOLO weights and model configuration
-        weightsPath = os.path.sep.join(["models", self.weights])
-        configPath = os.path.sep.join(["models", self.config])
+        #weightsPath = os.path.sep.join(["models", self.weights])
+        #configPath = os.path.sep.join(["models", self.config])
+        weightsPath = self.weights
+        configPath = self.config
 
         self.vs = framereader.FrameReader(self.resW, self.resH)
         self.vs.start()
@@ -134,3 +137,4 @@ class Detector():
 
     def destroy(self):
         self.vs.stop()
+
