@@ -219,7 +219,6 @@ class VideoStream:
 
     def shutDown():
 
-        break
         vs.release()
         cv2.destroyAllWindows()
 
