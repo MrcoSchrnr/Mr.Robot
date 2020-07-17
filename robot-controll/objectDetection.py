@@ -24,7 +24,7 @@ class Detector():
 
         # load the class labels our YOLO model was trained on
         labelsPath = self.labels
-        LABELS = open(labelsPath).read().strip().split("\n")
+        #LABELS = open(labelsPath).read().strip().split("\n")
 
         # derive the paths to the YOLO weights and model configuration
         #weightsPath = os.path.sep.join(["models", self.weights])

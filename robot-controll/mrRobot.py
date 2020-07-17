@@ -70,7 +70,7 @@ class Robot:
 
        
         #Init ObjectDetection
-        ObjDetection = objectDetection.Detector("../object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "../object-detection/yolov3/yolov3/64_v4/team5.names", "../object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192)
+        ObjDetection = objectDetection.Detector("object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "object-detection/yolov3/yolov3/64_v4/team5.names", "object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192)
 
         animalCatched = False
 
