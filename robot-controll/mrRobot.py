@@ -69,7 +69,7 @@ class Robot:
 
        
         #Init ObjectDetection
-        ObjDetection = objectDetection.ObjectDetection("../object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "")
+        ObjDetection = objectDetection.ObjectDetection("../object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "../object-detection/yolov3/yolov3/64_v4/team5.names", "../object-detection/yolov3/yolov3/64_v4/team5.cfg", 265, 192)
 
         animalCatched = False
 
@@ -79,8 +79,7 @@ class Robot:
 
             labels = ObjDetection.getLabels()
 
-            labels["classes"]
-        
+            dummy = labels["classes"]
 
             if animalScan == [self.animalSelector.selectedAnimal, "left", "top"] || animalScan == [self.animalSelector.selectedAnimal, "left", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "left", "bottom"]:
                 self.driver.turnLeft("slow")
