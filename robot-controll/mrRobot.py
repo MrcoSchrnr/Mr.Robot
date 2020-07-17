@@ -57,20 +57,30 @@ class Robot:
         print('finished starting function')
         print('--------------------------------------------------------------------')
 
-    """
+    
     def catchAnimal(self):                                  # has to be changed
         
         drivingThread = Thread(target=self.driver.driveForward("medium"))
 
         #detectionThread = Thread(target=XXX)
 
-
         drivingThread.start()
         #detectionThread.start()
+
+       
+        #Init ObjectDetection
+        ObjDetection = objectDetection.ObjectDetection("../object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "")
 
         animalCatched = False
 
         while animalCatched == False:       #animal is in middle-bottom area of camera
+
+            #TODO LOOP over Animals with properties
+
+            labels = ObjDetection.getLabels()
+
+            labels["classes"]
+        
 
             if animalScan == [self.animalSelector.selectedAnimal, "left", "top"] || animalScan == [self.animalSelector.selectedAnimal, "left", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "left", "bottom"]:
                 self.driver.turnLeft("slow")
@@ -107,7 +117,7 @@ class Robot:
         print('--------------------------------------------------------------------')
         print('finished catching function')
         print('--------------------------------------------------------------------')
-    """   
+     
 
     def freeAnimal(self):
         
@@ -164,7 +174,7 @@ class Robot:
 
     def goRobot(self):
         self.start()
-        self.catchAnimal()
+        #self.catchAnimal()
         self.freeAnimal()
 
 

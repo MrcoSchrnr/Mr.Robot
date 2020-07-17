@@ -1,4 +1,5 @@
 
+'''
 # Import packages
 import os
 import cv2
@@ -12,7 +13,7 @@ import time
 from threading import Thread
 
 class VideoStream:
-'''
+
     #resultion must be set in another class
      def __init__(self):
         # Initialize the PiCamera and the camera image stream
