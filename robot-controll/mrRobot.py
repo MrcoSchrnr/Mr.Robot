@@ -15,15 +15,16 @@ from subprocess import call
 from driving import Driver
 from sensorControl import AnimalSelector
 from sensorControl import LineSensor
-import objectDetection
+from objectDetection import ObjectDetector
+
 
 class Robot:
         
-    def __init__(self, selectedAnimal = "none"):
-        self.selectedAnimal = selectedAnimal
+    def __init__(self):
         self.driver = Driver()
         self.lineSensor = LineSensor()
         self.animalSelector = AnimalSelector()
+        self.objectDetector = ObjectDetector()
         self.pi = pigpio.pi()
 
     
@@ -61,39 +62,53 @@ class Robot:
     
     def catchAnimal(self):                                  # has to be changed
         
-        drivingThread = Thread(target=self.driver.driveForward("medium"))
+        detectionThread = Thread(target=self.objectDetector.startDetector, args=["object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "object-detection/yolov3/yolov3/64_v4/team5.names", "object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192])
+        drivingThread = Thread(target=self.driver.driveForward, args=["medium"])
 
-        #detectionThread = Thread(target=XXX)
-
+        detectionThread.start()
+        time.sleep(4)
         drivingThread.start()
-        #detectionThread.start()
 
-       
-        #Init ObjectDetection
-        ObjDetection = objectDetection.Detector("object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "object-detection/yolov3/yolov3/64_v4/team5.names", "object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192)
+        detectionThread.join()
+        drivingThread.join()
 
         animalCatched = False
 
         while animalCatched == False: #animal is in middle-bottom area of camera
 
-            #CHECK ANIMALS 
+            self.objectDetector.get_label_map()
+            counter = 0
 
-            #class id 0 = elephant
-            #class id 1 = tiger
-            #class id 2 = star
-            #class id 3 = cat 
-            #class id 4 = frog 
-
-            labels = ObjDetection.get_label_map()
-
-            if labels is not None and len(labels["classIds"]) > 0: #No animals found + exit
-                delta = labels["delta"] #time to valid an animal
-                print("Detected animals:")
-                print(labels["classIds"]) 
-
-                #TODO Loop over the array (over all founded animals)
+            for x in self.objectDetector.animalArray:
                 
-                #TODO Get name of selected animal and check if in labels.
+                print(self.animalSelector.selectedAnimal)
+                print(x)
+
+                if x == self.animalSelector.selectedAnimal:
+                    verticalPosition = self.objectDetector.verticalPositionArray[counter]
+                    horizontalPosition = self.objectDetector.horizontalPositionArray[counter]
+
+                    print("vertikale Position des ", self.animalSelector.selectedAnimal, "s: ", verticalPosition)
+                    print("horizontale Position des ", self.animalSelector.selectedAnimal, "s: ", horizontalPosition)
+                    self.driver.stopDriving()
+                else:
+                    print("not the selected Animal")
+                
+                counter += 1
+            
+            self.objectDetector.resetArrays()
+
+            break
+
+
+            #if labels is not None and len(labels["classIds"]) > 0: #No animals found + exit
+            #    delta = labels["delta"] #time to valid an animal
+            #    print("Detected animals:")
+            #    print(labels["classIds"]) 
+
+            #    #TODO Loop over the array (over all founded animals)
+                
+            #    #TODO Get name of selected animal and check if in labels.
 
 
         #     if animalScan == [self.animalSelector.selectedAnimal, "left", "top"] || animalScan == [self.animalSelector.selectedAnimal, "left", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "left", "bottom"]:
@@ -148,31 +163,25 @@ class Robot:
             #wait for crossing the line
             print('--------------------------------------------------------------------')
         
-        drivingThread._stop()
 
         time.sleep(0.5)
-        drivingThread = Thread(target=self.driver.stopDriving)
-        drivingThread.start()
+        drivingThread._stop()
+        self.driver.stopDriving()
         print('--------------------------------------------------------------------')
         print('Robot is stopped')        
         print('--------------------------------------------------------------------')
         time.sleep(1)
-        drivingThread._stop()
 
-        drivingThread = Thread(target=self.driver.driveBackwards, args=["fast"])
-        drivingThread.start()
+        self.driver.driveBackwards("fast")
         print('--------------------------------------------------------------------')
         print('Robot will drive away from the animal')
         print('--------------------------------------------------------------------')
         time.sleep(2)
-        drivingThread._stop()
 
-        drivingThread = Thread(target=self.driver.stopDriving)
-        drivingThread.start()
+        self.driver.stopDriving()
         print('--------------------------------------------------------------------')
         print('Robot is stopped | finished catching animal, shutting down Pi...')
         print('--------------------------------------------------------------------')
-        drivingThread._stop()
         
         time.sleep(5)
         print("just joking ;)")
@@ -198,7 +207,7 @@ Testing Area of the Script
 
 TestRobot = Robot()
 #TestRobot.goRobot()
-#TestRobot.start()
+TestRobot.start()
 TestRobot.catchAnimal()
 #TestRobot.freeAnimal()
 

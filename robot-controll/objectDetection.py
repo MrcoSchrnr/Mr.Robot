@@ -7,17 +7,36 @@ import imutils
 from gpiozero import CPUTemperature
 import framereader
 
-class Detector():
-    def __init__(self, weights, labels, config, resW, resH, treshhold = 0.4, cpu_temp_limit = 70):
+class ObjectDetector():
+
+    def __init__(self, treshhold = 0.4, cpu_temp_limit = 70):
         self.limitCPUtemp = True
-        self.weights = weights
-        self.labels = labels
-        self.config = config
-        self.resH = resH
-        self.resW = resW
+        self.weights = "none"
+        self.labels = "none"
+        self.config = "none"
+        self.resolutionHeight = 256
+        self.resolutionWidth = 192
         self.treshhold = treshhold
         self.cpu_temp_limit = cpu_temp_limit
         self.buffer_size = 1 #1 # number of frames in buffer
+
+
+        # Testing Arrays
+
+        self.animalArray = []
+        self.verticalPositionArray = []
+        self.horizontalPositionArray = []
+
+
+    def startDetector(self, weights, labels, config, resolutionWidght, resolutionHeight):
+
+        # getting data from probs
+
+        self.weights = weights
+        self.labels = labels
+        self.config = config
+        self.resolutionWidght = resolutionWidght
+        self.resolutionHeight = resolutionHeight
 
         # webcams 0 and 1
         myInput = 0
@@ -32,7 +51,7 @@ class Detector():
         weightsPath = self.weights
         configPath = self.config
 
-        self.vs = framereader.FrameReader(self.resW, self.resH)
+        self.vs = framereader.FrameReader(self.resolutionWidth, self.resolutionHeight)
         self.vs.start()
         time.sleep(3)
 
@@ -50,7 +69,6 @@ class Detector():
 
         # initialize the video stream, pointer to output video file, and
         # frame dimensions
-
 
 
     def get_label_map(self):
@@ -84,7 +102,7 @@ class Detector():
         # pass of the YOLO object detector, giving us our bounding boxes
         # and associated probabilities
         # blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (myDNNsize, myDNNsize),
-        blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (self.resH, self.resW),
+        blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (self.resolutionHeight, self.resolutionWidth),
             swapRB=True, crop=False)
         self.net.setInput(blob)
         
@@ -127,14 +145,71 @@ class Detector():
                     # update our list of bounding box coordinates,
                     # confidences, and class IDs
                     boxes.append([x, y, int(width), int(height)])
-                    confidences.append(float(confidence))
-                    classIDs.append(classID)
+
+                    if x <= 100:
+                        self.horizontalPositionArray.append("left")
                     
+                    elif x >= 160:
+                        self.horizontalPositionArray.append("right")
+                    
+                    else:
+                        self.horizontalPositionArray.append("middle")
+
+
+
+                    if y <= 64:
+                        self.verticalPositionArray.append("bottom")
+                    
+                    elif y >= 150:
+                        self.verticalPositionArray.append("top")
+                    
+                    else:
+                        self.verticalPositionArray.append("middle")
+
+
+                    confidences.append(float(confidence))
+
+
+                    # appending Animals to animalArray
+                    classIDs.append(classID)
+
+                    if classID == 0:
+                        self.animalArray.append("elephant")
+
+                    elif classID == 1:
+                        self.animalArray.append("tiger")
+            
+                    elif classID == 2:
+                        self.animalArray.append("star")
+
+                    elif classID == 3:
+                        self.animalArray.append("cat")
+
+                    elif classID == 4:
+                        self.animalArray.append("frog")
         
         end = time.time()
         elap = (end - start)
-        return {"delta": elap, "boxes": boxes, "confidents": confidences, "classIds": classIDs}
+
+        #print(self.animalArray)
+        #print(self.horizontalPositionArray)
+        #print(self.verticalPositionArray)
+
+        #return {"delta": elap, "boxes": boxes, "confidents": confidences, "classIds": classIDs}
+
+        #return animalDictionary
+
+    def resetArrays(self):
+        self.animalArray.clear()
+        self.horizontalPositionArray.clear()
+        self.verticalPositionArray.clear()
 
     def destroy(self):
         self.vs.stop()
 
+
+# Testing Area 
+
+#Test = ObjectDetector()
+#Test.startDetector("object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "object-detection/yolov3/yolov3/64_v4/team5.names", "object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192)
+#Test.get_label_map()

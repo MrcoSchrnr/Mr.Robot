@@ -36,27 +36,28 @@ class AnimalSelector:
             if self.checkPin(x) == True:
                 
                 if x == self.elephantPin:
-                    self.selectedAnimal = "Elephant"
+                    self.selectedAnimal = "elephant"
                     return self.selectedAnimal
                 
                 elif x == self.tigerPin:
-                    self.selectedAnimal = "Tiger"
+                    self.selectedAnimal = "tiger"
                     return self.selectedAnimal
                 
                 elif x == self.frogPin:
-                    self.selectedAnimal = "Frog"
+                    self.selectedAnimal = "frog"
                     return self.selectedAnimal
 
                 elif x == self.catPin:
-                    self.selectedAnimal = "Cat"
+                    self.selectedAnimal = "cat"
                     return self.selectedAnimal
 
                 elif x == self.starPin:
-                    self.selectedAnimal = "Star"
+                    self.selectedAnimal = "star"
                     return self.selectedAnimal
 
                 else:
                     print("Something went wrong. Please check the selected Pin")
+                    return self.selectedAnimal
                     break
 
             else:
