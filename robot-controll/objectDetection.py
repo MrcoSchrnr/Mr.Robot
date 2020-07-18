@@ -142,25 +142,30 @@ class ObjectDetector():
                     x = int(centerX - (width / 2))
                     y = int(centerY - (height / 2))
 
+                    print("Aktuelle Horinzontale: ", x)
+                    print("Aktuelle Verticale: ", y)
+
+
                     # update our list of bounding box coordinates,
                     # confidences, and class IDs
                     boxes.append([x, y, int(width), int(height)])
 
-                    if x <= 100:
+                  
+                    if x <= 18: #TODO Calibrate 
                         self.horizontalPositionArray.append("left")
                     
-                    elif x >= 160:
+                    elif x >= 74:  #TODO Calibrate 
                         self.horizontalPositionArray.append("right")
                     
                     else:
                         self.horizontalPositionArray.append("middle")
 
 
-
-                    if y <= 64:
+                    #je größer, desto näher
+                    if y <= 40: #TODO Calibrate 
                         self.verticalPositionArray.append("bottom")
                     
-                    elif y >= 150:
+                    elif y >= 60:  #TODO Calibrate 
                         self.verticalPositionArray.append("top")
                     
                     else:
