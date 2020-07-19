@@ -60,7 +60,7 @@ class Robot:
         print('--------------------------------------------------------------------')
 
     
-    def catchAnimal(self):                                  # has to be changed
+    def catchAnimal(self):                                  
         
         detectionThread = Thread(target=self.objectDetector.startDetector, args=["object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "object-detection/yolov3/yolov3/64_v4/team5.names", "object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192])
         drivingThread = Thread(target=self.driver.driveForward, args=["medium"])
@@ -74,7 +74,7 @@ class Robot:
 
         animalCatched = False
 
-        while animalCatched == False: #animal is in middle-bottom area of camera
+        while animalCatched == False: 
 
             self.objectDetector.get_label_map()
             counter = 0
@@ -83,6 +83,7 @@ class Robot:
                 
                 print(self.animalSelector.selectedAnimal)
                 print(x)
+                print('--------------------------------------------------------------------')
 
                 if x == self.animalSelector.selectedAnimal:
                     verticalPosition = self.objectDetector.verticalPositionArray[counter]
@@ -91,58 +92,36 @@ class Robot:
                     print("vertikale Position des ", self.animalSelector.selectedAnimal, "s: ", verticalPosition)
                     print("horizontale Position des ", self.animalSelector.selectedAnimal, "s: ", horizontalPosition)
                     self.driver.stopDriving()
+
+                    if horizontalPosition == "left":
+                        self.driver.turnLeft("slow")
+                        time.sleep(0.5)
+                        self.driver.driveForward("slow")
+                    
+                    elif horinzontalPosition == "right":
+                        self.driver.turnLeft("slow")
+                        time.sleep(0.5)
+                        self.driver.driveForward("slow")
+                    
+                    elif horizontalPosition == "middle":
+                        self.driver.driveForward("medium")
+                        time.sleep(1)
+                        self.driver.driveForward("slow")
+
+                    elif horizontalPosition == "middle" and verticalPosition == "bottom":
+                        self.driver.driveForward("slow")
+                        time.sleep(1)
+                        animalCatched = True
+
                 else:
                     print("not the selected Animal")
                 
                 counter += 1
             
             self.objectDetector.resetArrays()
+            continue
 
-            break
-
-
-            #if labels is not None and len(labels["classIds"]) > 0: #No animals found + exit
-            #    delta = labels["delta"] #time to valid an animal
-            #    print("Detected animals:")
-            #    print(labels["classIds"]) 
-
-            #    #TODO Loop over the array (over all founded animals)
-                
-            #    #TODO Get name of selected animal and check if in labels.
-
-
-        #     if animalScan == [self.animalSelector.selectedAnimal, "left", "top"] || animalScan == [self.animalSelector.selectedAnimal, "left", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "left", "bottom"]:
-        #         self.driver.turnLeft("slow")
-        #         time.sleep(0.5)
-        #         self.driver.driveForward("slow")
-        #         pass
-
-        #     elif animalScan == [self.animalSelector.selectedAnimal, "right", "top"] || animalScan == [self.animalSelector.selectedAnimal, "right", "middle"] || animalScan == [self.animalSelector.selectedAnimal, "right", "bottom"]:
-        #         self.driver.turnRight("slow")
-        #         time.sleep(0.5)
-        #         self.driver.driveForward("slow")
-        #         pass
-
-        #     elif animalScan == [self.animalSelector.selectedAnimal, "middle", "top"]:
-        #         self.driver.driveForward("fast")
-        #         time.sleep(1)
-        #         pass
-
-        #     elif animalScan == [self.animalSelector.selectedAnimal, "middle", "middle"]:
-        #         self.driver.driveForward("medium")
-        #         time.sleep(1)
-        #         pass
-
-        #     elif animalScan == [self.animalSelector.selectedAnimal, "middle", "bottom"]:
-        #         time.sleep(1)           #maybe should continue driving for 1 seconds that the animal is for sure in front of the robot
-        #         animalCatched = True
-
-        #     else:
-        #         print("something went wrong. Pi will Shutdown now")
-        #         self.pi.stop()
-
-            # self.driver.stopDriving()
-
+            self.driver.stopDriving()
             print('--------------------------------------------------------------------')
             print('finished catching function')
             print('--------------------------------------------------------------------')
@@ -167,15 +146,9 @@ class Robot:
         time.sleep(0.5)
         drivingThread._stop()
         self.driver.stopDriving()
-        print('--------------------------------------------------------------------')
-        print('Robot is stopped')        
-        print('--------------------------------------------------------------------')
         time.sleep(1)
 
         self.driver.driveBackwards("fast")
-        print('--------------------------------------------------------------------')
-        print('Robot will drive away from the animal')
-        print('--------------------------------------------------------------------')
         time.sleep(2)
 
         self.driver.stopDriving()
@@ -183,10 +156,6 @@ class Robot:
         print('Robot is stopped | finished catching animal, shutting down Pi...')
         print('--------------------------------------------------------------------')
         
-        time.sleep(5)
-        print("just joking ;)")
-        time.sleep(1)
-        print("or not?")
         time.sleep(5)
 
         #shut down Pi for new Round
@@ -197,7 +166,7 @@ class Robot:
 
     def goRobot(self):
         self.start()
-        #self.catchAnimal()
+        self.catchAnimal()
         self.freeAnimal()
 
 
