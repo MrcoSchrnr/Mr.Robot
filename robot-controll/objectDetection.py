@@ -142,19 +142,14 @@ class ObjectDetector():
                     x = int(centerX - (width / 2))
                     y = int(centerY - (height / 2))
 
-                    print("Aktuelle Horinzontale: ", x)
-                    print("Aktuelle Verticale: ", y)
-
-
-                    # update our list of bounding box coordinates,
-                    # confidences, and class IDs
-                    boxes.append([x, y, int(width), int(height)])
+                    print("Aktuelle Horinzontale: ", centerX)
+                    print("Aktuelle Verticale: ", centerY)
 
                   
-                    if x <= 18: #TODO Calibrate 
+                    if centerX <= 50: #TODO Calibrate 
                         self.horizontalPositionArray.append("left")
                     
-                    elif x >= 74:  #TODO Calibrate 
+                    elif centerX >= 125:  #TODO Calibrate 
                         self.horizontalPositionArray.append("right")
                     
                     else:
@@ -162,10 +157,10 @@ class ObjectDetector():
 
 
                     #je größer, desto näher
-                    if y <= 40: #TODO Calibrate 
+                    if centerY >= 140: #TODO Calibrate 
                         self.verticalPositionArray.append("bottom")
                     
-                    elif y >= 60:  #TODO Calibrate 
+                    elif centerY <= 70:  #TODO Calibrate 
                         self.verticalPositionArray.append("top")
                     
                     else:
@@ -218,3 +213,6 @@ class ObjectDetector():
 #Test = ObjectDetector()
 #Test.startDetector("object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "object-detection/yolov3/yolov3/64_v4/team5.names", "object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192)
 #Test.get_label_map()
+#print(Test.animalArray)
+#print(Test.verticalPositionArray)
+#print(Test.horizontalPositionArray)

@@ -254,5 +254,7 @@ class Driver:
     def stopDriving(self):
         self.engines.stopAllEngines()
 
-#TestDriver = Driver()
+TestDriver = Driver()
+#TestDriver.driveForward("slow")
+#time.sleep(1)
 #TestDriver.stopDriving()

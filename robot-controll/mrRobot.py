@@ -98,7 +98,7 @@ class Robot:
                         time.sleep(0.5)
                         self.driver.driveForward("slow")
                     
-                    elif horinzontalPosition == "right":
+                    elif horizontalPosition == "right":
                         self.driver.turnLeft("slow")
                         time.sleep(0.5)
                         self.driver.driveForward("slow")
