@@ -142,7 +142,6 @@ class Robot:
             #wait for crossing the line
             print('--------------------------------------------------------------------')
         
-
         time.sleep(0.5)
         drivingThread._stop()
         self.driver.stopDriving()
