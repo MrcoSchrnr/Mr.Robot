@@ -88,10 +88,13 @@ class LineSensor:
         cb = self.pi.callback(self.GPIO_LIGHT, pigpio.RISING_EDGE, self.levelChanged)
         
         while self.lineCrossed == False:
-            time.sleep(0.5)
-            print("Waiting for crossing Line.")
+            time.sleep(0.1)
+            #print("Waiting for crossing Line.")
+            continue
 
         print('Robot crossed line.')
         print('--------------------------------------------------------------------')
-        time.sleep(2)
-    
+
+#test = AnimalSelector()
+#x = test.getSelectedAnimal()
+#print(x)

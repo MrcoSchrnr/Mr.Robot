@@ -9,7 +9,7 @@ import framereader
 
 class ObjectDetector():
 
-    def __init__(self, treshhold = 0.4, cpu_temp_limit = 70):
+    def __init__(self, treshhold = 0.3, cpu_temp_limit = 70):
         self.limitCPUtemp = True
         self.weights = "none"
         self.labels = "none"
@@ -142,14 +142,14 @@ class ObjectDetector():
                     x = int(centerX - (width / 2))
                     y = int(centerY - (height / 2))
 
-                    print("Aktuelle Horinzontale: ", centerX)
-                    print("Aktuelle Verticale: ", centerY)
+                    #print("Aktuelle Horinzontale: ", centerX)
+                    #print("Aktuelle Verticale: ", centerY)
 
                   
-                    if centerX <= 50: #TODO Calibrate 
+                    if centerX <= 75: #TODO Calibrate 
                         self.horizontalPositionArray.append("left")
                     
-                    elif centerX >= 125:  #TODO Calibrate 
+                    elif centerX >= 100:  #TODO Calibrate 
                         self.horizontalPositionArray.append("right")
                     
                     else:

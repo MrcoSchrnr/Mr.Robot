@@ -56,10 +56,10 @@ class Engines:
         try:
             duty = PWM_DUTY_CYCLE * 10000 # Max: 1M
             self.pi.hardware_PWM (self.PWM_BACK, PWM_FREQUENCY, duty)
-            print('Hardware PWM on GPIO ' + str(self.PWM_BACK) + ' enabled')
-            print('Frequency: ' + str(self.pi.get_PWM_frequency(self.PWM_BACK)) + ' Hz')
-            print('Dutycycle: ' + \
-                    str(self.pi.get_PWM_dutycycle(self.PWM_BACK) / 10000) + ' percent')
+            #print('Hardware PWM on GPIO ' + str(self.PWM_BACK) + ' enabled')
+            #print('Frequency: ' + str(self.pi.get_PWM_frequency(self.PWM_BACK)) + ' Hz')
+            #print('Dutycycle: ' + \
+            #        str(self.pi.get_PWM_dutycycle(self.PWM_BACK) / 10000) + ' percent')
 
         except: 
             print('Hardware PWM not available on GPIO ' + str(self.PWM_BACK))
@@ -73,7 +73,7 @@ class Engines:
         self.pi.write(self.IN1_BACK, 1)
         self.pi.write(self.IN2_BACK, 1)
 
-        print('The Engine on the back is now stopped.')
+        #print('The Engine on the back is now stopped.')
 
 
     def setSpeedLeft(self, ahead, frequency, dutyCycle):
@@ -95,10 +95,10 @@ class Engines:
             try:
                 duty = PWM_DUTY_CYCLE * 10000 # Max: 1M
                 self.pi.hardware_PWM (self.PWM_LEFT, PWM_FREQUENCY, duty)
-                print('Hardware PWM on GPIO ' + str(self.PWM_LEFT) + ' enabled')
-                print('Frequency: ' + str(self.pi.get_PWM_frequency(self.PWM_LEFT)) + ' Hz')
-                print('Dutycycle: ' + \
-                        str(self.pi.get_PWM_dutycycle(self.PWM_LEFT) / 10000) + ' percent')
+                #print('Hardware PWM on GPIO ' + str(self.PWM_LEFT) + ' enabled')
+                #print('Frequency: ' + str(self.pi.get_PWM_frequency(self.PWM_LEFT)) + ' Hz')
+                #print('Dutycycle: ' + \
+                #        str(self.pi.get_PWM_dutycycle(self.PWM_LEFT) / 10000) + ' percent')
 
             except: 
                 print('Hardware PWM not available on GPIO ' + str(self.PWM_LEFT))
@@ -112,7 +112,7 @@ class Engines:
         self.pi.write(self.IN1_LEFT, 1)
         self.pi.write(self.IN2_LEFT, 1)
 
-        print('The Engine on the left side is now stopped.')
+        #print('The Engine on the left side is now stopped.')
 
 
     def setSpeedRight(self, ahead, frequency, dutyCycle):
@@ -134,10 +134,10 @@ class Engines:
             try:
                 duty = PWM_DUTY_CYCLE * 10000 # Max: 1M
                 self.pi.hardware_PWM (self.PWM_RIGHT, PWM_FREQUENCY, duty)
-                print('Hardware PWM on GPIO ' + str(self.PWM_RIGHT) + ' enabled')
-                print('Frequency: ' + str(self.pi.get_PWM_frequency(self.PWM_RIGHT)) + ' Hz')
-                print('Dutycycle: ' + \
-                        str(self.pi.get_PWM_dutycycle(self.PWM_RIGHT) / 10000) + ' percent')
+                #print('Hardware PWM on GPIO ' + str(self.PWM_RIGHT) + ' enabled')
+                #print('Frequency: ' + str(self.pi.get_PWM_frequency(self.PWM_RIGHT)) + ' Hz')
+                #print('Dutycycle: ' + \
+                #        str(self.pi.get_PWM_dutycycle(self.PWM_RIGHT) / 10000) + ' percent')
 
             except: 
                 print('Hardware PWM not available on GPIO ' + str(self.PWM_RIGHT))
@@ -151,7 +151,7 @@ class Engines:
         self.pi.write(self.IN1_RIGHT, 1)
         self.pi.write(self.IN2_RIGHT, 1)
 
-        print('The Engine on the right side is now stopped.')
+        #print('The Engine on the right side is now stopped.')
 
 
     def stopAllEngines(self):

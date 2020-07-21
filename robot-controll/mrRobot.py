@@ -10,7 +10,7 @@ Procedure: 1.init Robot 2.driving forward 3.if cross line -> activate camera 4.d
 
 import time 
 import pigpio
-from threading import Thread
+from threading import Thread, Lock
 from subprocess import call
 from driving import Driver
 from sensorControl import AnimalSelector
@@ -26,6 +26,7 @@ class Robot:
         self.animalSelector = AnimalSelector()
         self.objectDetector = ObjectDetector()
         self.pi = pigpio.pi()
+        self.animalCatched = False
 
     
     def start(self):
@@ -35,22 +36,23 @@ class Robot:
         if self.animalSelector.selectedAnimal == "none":
             print("Something went wront. Shutting down RPi.")
             time.sleep(5)
-            call('sudo shutdown -h now', shell=True)
+            #call('sudo shutdown -h now', shell=True)
 
         print(self.animalSelector.selectedAnimal)
 
         lineSensorThread = Thread(target=self.lineSensor.runLineChecker)
         drivingThread = Thread(target=self.driver.driveForward, args=["fast"])
 
-        drivingThread.start()
         lineSensorThread.start()
+        drivingThread.start()
 
-        drivingThread.join()
         lineSensorThread.join()
+        drivingThread.join()
         
         while self.lineSensor.lineCrossed == False:
             #wait for crossing the line
             print('--------------------------------------------------------------------')
+            continue
 
         drivingThread._stop()
         self.driver.stopDriving()
@@ -63,69 +65,94 @@ class Robot:
     def catchAnimal(self):                                  
         
         detectionThread = Thread(target=self.objectDetector.startDetector, args=["object-detection/yolov3/yolov3/64_v4/yolov3-tiny_last.weights", "object-detection/yolov3/yolov3/64_v4/team5.names", "object-detection/yolov3/yolov3/64_v4/team5.cfg", 256, 192])
-        drivingThread = Thread(target=self.driver.driveForward, args=["medium"])
+        drivingThread = Thread(target=self.driver.driveForward, args=["slow"])
+        lineSensorThread = Thread(target=self.lineSensor.runLineChecker, daemon=True)
 
         detectionThread.start()
-        time.sleep(4)
-        drivingThread.start()
+        time.sleep(1)
 
+        drivingThread.start()
         detectionThread.join()
         drivingThread.join()
+        lineSensorThread.start()
 
-        animalCatched = False
+        goOn = True
 
-        while animalCatched == False: 
+        while goOn == True: 
 
-            self.objectDetector.get_label_map()
-            counter = 0
+            if self.lineSensor.lineCrossed == True:
+                time.sleep(0.5)
+                drivingThread._stop()
+                self.driver.stopDriving()
+                time.sleep(0.5)
 
-            for x in self.objectDetector.animalArray:
+                self.driver.driveBackwards("fast")
+                time.sleep(3)
+
+                self.driver.stopDriving()
+
+                #pi shutdown has to be inserted 
+
+            else:
+                self.objectDetector.get_label_map()
+                counter = 0
+
+                print(self.objectDetector.animalArray)
+                for x in self.objectDetector.animalArray:
+                    
+                    print(self.animalSelector.selectedAnimal)
+                    print(type(self.animalSelector.selectedAnimal))
+                    print(x)
+                    print(type(x))
+                    print('--------------------------------------------------------------------')
+
+                    if x == self.animalSelector.selectedAnimal:
+                        verticalPosition = self.objectDetector.verticalPositionArray[counter]
+                        horizontalPosition = self.objectDetector.horizontalPositionArray[counter]
+
+                        print("vertikale Position des ", self.animalSelector.selectedAnimal, "s: ", verticalPosition)
+                        print("horizontale Position des ", self.animalSelector.selectedAnimal, "s: ", horizontalPosition)
+                        self.driver.stopDriving()
+
+                        if horizontalPosition == "left":
+                            self.driver.turnLeft()
+                            time.sleep(0.25)
+                        
+                        elif horizontalPosition == "right":
+                            self.driver.turnRight()
+                            time.sleep(0.25)
+
+                        elif horizontalPosition == "middle" and verticalPosition == "middle":
+                            self.driver.driveForward("fast")
+                            time.sleep(1.5)
+                            self.animalCatched = True
+
+                        elif horizontalPosition == "middle" and verticalPosition == "bottom":
+                            self.animalCatched = True
+
+                        else:
+                            self.driver.driveForward("medium")
+                            time.sleep(1.0)
+
+                    counter += 1
                 
-                print(self.animalSelector.selectedAnimal)
-                print(x)
-                print('--------------------------------------------------------------------')
-
-                if x == self.animalSelector.selectedAnimal:
-                    verticalPosition = self.objectDetector.verticalPositionArray[counter]
-                    horizontalPosition = self.objectDetector.horizontalPositionArray[counter]
-
-                    print("vertikale Position des ", self.animalSelector.selectedAnimal, "s: ", verticalPosition)
-                    print("horizontale Position des ", self.animalSelector.selectedAnimal, "s: ", horizontalPosition)
+                else:
+                    self.driver.driveForward("medium")
+                    time.sleep(1.0)
                     self.driver.stopDriving()
 
-                    if horizontalPosition == "left":
-                        self.driver.turnLeft("slow")
-                        time.sleep(0.5)
-                        self.driver.driveForward("slow")
-                    
-                    elif horizontalPosition == "right":
-                        self.driver.turnLeft("slow")
-                        time.sleep(0.5)
-                        self.driver.driveForward("slow")
-                    
-                    elif horizontalPosition == "middle":
-                        self.driver.driveForward("medium")
-                        time.sleep(1)
-                        self.driver.driveForward("slow")
 
-                    elif horizontalPosition == "middle" and verticalPosition == "bottom":
-                        self.driver.driveForward("slow")
-                        time.sleep(1)
-                        animalCatched = True
+                self.objectDetector.resetArrays()
 
-                else:
-                    print("not the selected Animal")
-                
-                counter += 1
-            
-            self.objectDetector.resetArrays()
-            continue
+                goOn = not self.animalCatched
+                continue
 
-            self.driver.stopDriving()
-            print('--------------------------------------------------------------------')
-            print('finished catching function')
-            print('--------------------------------------------------------------------')
-     
+        self.driver.stopDriving()
+        print('--------------------------------------------------------------------')
+        print('finished catching function')
+        print('--------------------------------------------------------------------')
+    
+
 
     def freeAnimal(self):
         
@@ -145,10 +172,10 @@ class Robot:
         time.sleep(0.5)
         drivingThread._stop()
         self.driver.stopDriving()
-        time.sleep(1)
+        time.sleep(0.5)
 
         self.driver.driveBackwards("fast")
-        time.sleep(2)
+        time.sleep(3)
 
         self.driver.stopDriving()
         print('--------------------------------------------------------------------')
@@ -174,8 +201,5 @@ Testing Area of the Script
 """
 
 TestRobot = Robot()
-#TestRobot.goRobot()
-TestRobot.start()
-TestRobot.catchAnimal()
-#TestRobot.freeAnimal()
+TestRobot.goRobot()
 

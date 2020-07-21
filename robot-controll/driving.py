@@ -35,8 +35,8 @@ class Driver:
             engineBackThread.join()
 
         elif rate == "medium":
-            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 10])
-            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 10])
+            engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 30])
+            engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 30])
             engineBackThread = Thread(target=self.engines.stopEngineBack) 
             
             # start all threads
@@ -219,7 +219,7 @@ class Driver:
             print('Error. No rate selected.')      
 
 
-    def turnLeft(self, rate):
+    def turnLeft(self):
         engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[False, 50000, 5])
         engineRightThread = Thread(target=self.engines.setSpeedRight, args=[True, 50000, 5])
         engineBackThread = Thread(target=self.engines.setSpeedBack, args=[True, 50000, 10])
@@ -235,7 +235,7 @@ class Driver:
         engineBackThread.join()
 
 
-    def turnRight(self, rate):
+    def turnRight(self):
         engineLeftThread = Thread(target=self.engines.setSpeedLeft, args=[True, 50000, 5])
         engineRightThread = Thread(target=self.engines.setSpeedRight, args=[False, 50000, 5])
         engineBackThread = Thread(target=self.engines.setSpeedBack, args=[False, 50000, 10])
@@ -255,6 +255,8 @@ class Driver:
         self.engines.stopAllEngines()
 
 TestDriver = Driver()
-#TestDriver.driveForward("slow")
-#time.sleep(1)
-#TestDriver.stopDriving()
+#TestDriver.driveForward("medium")
+#TestDriver.turnLeft()
+#time.sleep(0.25)
+#time.sleep(2)
+TestDriver.stopDriving()
