@@ -1,0 +1,5 @@
+frog
+cat
+elephant
+tiger
+star

@@ -1,5 +1,0 @@
-classes= 5
-train = /object-detection/train.txt
-valid = /object-detection/test.txt
-names = /object-detection/object.names
-backup = /object-detection/backup/
