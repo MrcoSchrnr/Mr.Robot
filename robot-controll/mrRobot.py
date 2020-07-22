@@ -27,6 +27,7 @@ class Robot:
         self.objectDetector = ObjectDetector()
         self.pi = pigpio.pi()
         self.animalCatched = False
+        self.noneAnimalFound = False
 
     
     def start(self):
@@ -90,6 +91,10 @@ class Robot:
                 time.sleep(3)
 
                 self.driver.stopDriving()
+
+                self.noneAnimalFound = True
+
+                return self.noneAnimalFound
 
                 #pi shutdown has to be inserted 
 
@@ -182,7 +187,7 @@ class Robot:
         print('Robot is stopped | finished catching animal, shutting down Pi...')
         print('--------------------------------------------------------------------')
         
-        time.sleep(5)
+        time.sleep(2)
 
         #shut down Pi for new Round
         #call('sudo shutdown -h now', shell=True)
@@ -193,7 +198,13 @@ class Robot:
     def goRobot(self):
         self.start()
         self.catchAnimal()
-        self.freeAnimal()
+        
+        if self.noneAnimalFound ==  False:
+            self.freeAnimal()
+
+        else: 
+            pass
+
 
 
 """
